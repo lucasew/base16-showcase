@@ -57,7 +57,6 @@ function handleOneStructure(obj: any) {
             [slug]: theme
         }
     })
-    console.log(obj)
 }
 
 function handleFilesInput(_files: FileList) {
@@ -80,7 +79,6 @@ function handleFilesInput(_files: FileList) {
                 // It's safe (i expect) to parse it as only one level depth
                 let structure = {}
                 yaml.split("\n").map(line => line.split(":")).forEach(([key, value]) => {
-                    console.log(key, value)
                     if (key.trim().length > 0) {
                         structure[key] = JSON.parse(value)
                     }
@@ -90,7 +88,6 @@ function handleFilesInput(_files: FileList) {
             default:
                 return
         }
-        console.log(file.type)
         // const text = await file.text()
     }))
 }
@@ -101,7 +98,6 @@ document.addEventListener('drop', (ev: DragEvent) => {
 
 document.addEventListener('dragover', (ev) => {
     ev.preventDefault()
-    console.log("prevent default")
 })
 
 let doubleclickEngaged = false
@@ -113,7 +109,6 @@ document.addEventListener('dblclick', () => {
         doubleclickEngaged = true
     }
     document.getElementById("data-input").click()
-    console.log("doubleclick")
 })
 
 export default themeStore;

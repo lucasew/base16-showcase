@@ -9,10 +9,11 @@ export let theme: Theme;
         width: 100%;
     }
     .theme-card-sample-container {
-        width: 90%;
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
     }
     .theme-card-info-container {
         display: flex;
@@ -20,9 +21,16 @@ export let theme: Theme;
         flex-direction: row;
         justify-content: space-between;
     }
+    .theme-card-info-container h2 {
+        margin-right: 3rem;
+        white-space: nowrap;
+    }
+    .theme-card-info-container p {
+        text-align: right;
+    }
     .theme-card-color-container {
-        width: 1fr;
-        aspect-ratio: 1;
+        width: var(--color-cell-size);
+        height: var(--color-cell-size);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -44,7 +52,7 @@ export let theme: Theme;
     <div class="theme-card-sample-container">
         {#each Object.keys(theme.colors) as color}
             <div class="theme-card-color-container" style="background-color: #{theme.colors[color]}">
-                <p style="color: #{theme.colors[color]}">{color}</p>
+                <p>{color}</p>
             </div>
         {/each}
     </div>
