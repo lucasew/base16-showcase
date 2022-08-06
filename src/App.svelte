@@ -1,7 +1,9 @@
 <script lang="ts">
 	import themeStore from "./stores/themes";
 	import locationStore from './stores/location'
-	let themes = null
+	import type { Maybe, Theme } from "./Model";
+	import ThemeCard from "./components/ThemeCard.svelte";
+	let themes: Maybe<Theme[]> = null
 	let location = new URL(window.location.href)
 	themeStore.subscribe(_themes => {
 		console.log("themes", _themes)
@@ -13,6 +15,15 @@
 </script>
 
 <div id="content">
+	<h1>Base16 theme showcase</h1>
+	
+	{#if themes != null}
+		{#each Object.values(themes) as theme }
+			<ThemeCard theme={theme} />
+		{/each}
+	{:else}
+		<h2>No themes</h2>
+	{/if}
 	<input type="file" id="data-input"/>
 </div>
 
