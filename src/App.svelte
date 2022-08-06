@@ -48,7 +48,10 @@
 		<ThemeCard theme={theme} />
 	{/each}
 {:else}
-	<h2>No themes</h2>
+	<h2>No themes loaded</h2>
+	<p>You can load a nix-colors structured JSON or a base16 YAML file.</p>
+	<p>Some other details may be covered by this app.</p>
+	<p>You can drag-and-drop the files or double-click anywhere in the app to open a file selector.</p>
 {/if}
 <input type="file" id="data-input"/>
 
