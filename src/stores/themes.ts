@@ -1,5 +1,5 @@
 import { writable } from "svelte/store";
-import { Maybe, Theme } from "../Model";
+import type { Maybe, Theme } from "../Model";
 
 const _themeStore = writable<Maybe<Record<string,Theme>>>(null);
 
