@@ -1,41 +1,13 @@
 <script lang="ts">
 	import themeStore from "./stores/themes";
 	import locationStore from './stores/location'
-	import type { Maybe, Theme } from "./Model";
-	import ThemeCard from "./components/ThemeCard.svelte";
 	import {Github} from '@icons-pack/svelte-simple-icons' 
-	import { onMount } from "svelte";
-	let themes: Maybe<Theme[]> = null
+	import Themes from "./components/Themes.svelte";
+	import type { Maybe, Theme } from "./Model";
 	let location = new URL(window.location.href)
-
-	function handleResize() {
-		requestAnimationFrame(() => {
-			const elem = document.querySelector(".theme-card-sample-container")
-			if (!!elem) {
-				const computed = getComputedStyle(elem)
-				// 5rem is the default color cell size
-				const remWide = parseInt(computed.width) / parseInt(computed.fontSize)
-				const parts = Math.floor(remWide/5)
-				let multiplier = 1
-				while (multiplier*2 <= parts) {
-					multiplier*=2
-				} 
-					document.documentElement.style.setProperty('--color-cell-size', `${remWide/multiplier}rem`)
-				// console.log("parts", parts, multiplier)
-			}
-		})
-	}
-
-	themeStore.subscribe(_themes => {
-		themes = _themes
-		handleResize()
-	})
 	locationStore.subscribe(_location => location = _location)
-	
-	onMount(async function () {
-		window.addEventListener('resize', handleResize)
-		handleResize()
-	})
+	let themes: Maybe<Record<string,Theme>> = null
+	themeStore.subscribe(_themes => themes = _themes)
 </script>
 
 <svelte:head>
@@ -45,9 +17,7 @@
 <h1>Base16 theme showcase <a id="github-link" href="https://github.com/lucasew/base16-showcase" target="_blank"><Github/></a></h1>
 
 {#if themes != null}
-	{#each Object.values(themes) as theme }
-		<ThemeCard theme={theme} />
-	{/each}
+	<Themes/>
 {:else}
 	<h2>No themes loaded</h2>
 	<p>You can load a nix-colors structured JSON or a base16 YAML file.</p>
