@@ -3,6 +3,7 @@
 	import locationStore from './stores/location'
 	import type { Maybe, Theme } from "./Model";
 	import ThemeCard from "./components/ThemeCard.svelte";
+	import {Github} from '@icons-pack/svelte-simple-icons' 
 	import { onMount } from "svelte";
 	let themes: Maybe<Theme[]> = null
 	let location = new URL(window.location.href)
@@ -41,7 +42,7 @@
 	<title>Base16 theme showcase</title>
 </svelte:head>
 
-<h1>Base16 theme showcase</h1>
+<h1>Base16 theme showcase <a id="github-link" href="https://github.com/lucasew/base16-showcase" target="_blank"><Github/></a></h1>
 
 {#if themes != null}
 	{#each Object.values(themes) as theme }
@@ -58,6 +59,9 @@
 <style>
 	#data-input {
 		display: none;
+	}
+	#github-link {
+		color: unset;
 	}
 	:global(body) {
 		min-height: 100vh;
