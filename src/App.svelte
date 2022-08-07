@@ -4,6 +4,7 @@
   import { Github } from "@icons-pack/svelte-simple-icons";
   import Themes from "./components/Themes.svelte";
   import type { Maybe, Theme } from "./Model";
+import { i18nString } from "./i18n";
   let location = new URL(window.location.href);
   locationStore.subscribe((_location) => (location = _location));
   let themes: Maybe<Record<string, Theme>> = null;
@@ -11,11 +12,11 @@
 </script>
 
 <svelte:head>
-  <title>Base16 theme showcase</title>
+  <title>{i18nString('title')}</title>
 </svelte:head>
 
 <h1>
-  Base16 theme showcase
+  {i18nString('title')}
   <a
     id="github-link"
     href="https://github.com/lucasew/base16-showcase"
@@ -28,13 +29,10 @@
 {#if themes != null}
   <Themes />
 {:else}
-  <h2>No themes loaded</h2>
-  <p>You can load a nix-colors structured JSON or a base16 YAML file.</p>
-  <p>Some other details may be covered by this app.</p>
-  <p>
-    You can drag-and-drop the files or double-click anywhere in the app to open
-    a file selector.
-  </p>
+  <h2>{i18nString('no_themes_loaded')}</h2>
+  <p>{i18nString('instruction_supported_formats')}</p>
+  <p>{i18nString('instruction_other_details')}</p>
+  <p>{i18nString('instruction_ingestion')}</p>
 {/if}
 <input type="file" id="data-input" multiple/>
 
