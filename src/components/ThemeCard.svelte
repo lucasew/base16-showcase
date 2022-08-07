@@ -15,7 +15,7 @@
         class="theme-card-color-container"
         style="background-color: #{theme.colors[color]}"
       >
-        <p>{color}</p>
+        <p>#{theme.colors[color]}</p>
       </div>
     {/each}
   </div>
@@ -58,5 +58,6 @@
     border-radius: 0.05rem;
     margin: 0.5rem;
     font-family: "Courier New", monospace;
+    text-transform: uppercase;
   }
 </style>
