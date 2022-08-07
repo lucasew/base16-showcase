@@ -15,11 +15,14 @@
 </svelte:head>
 
 <h1>
-  Base16 theme showcase <a
+  Base16 theme showcase
+  <a
     id="github-link"
     href="https://github.com/lucasew/base16-showcase"
-    target="_blank"><Github /></a
+    target="_blank"
   >
+    <Github />
+  </a>
 </h1>
 
 {#if themes != null}
@@ -33,7 +36,7 @@
     a file selector.
   </p>
 {/if}
-<input type="file" id="data-input" />
+<input type="file" id="data-input" multiple/>
 
 <style>
   #data-input {
