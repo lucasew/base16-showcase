@@ -1,10 +1,10 @@
 <script lang="ts">
-  import themeStore from "./stores/themes";
+  import themeStore, { loadDefaultThemes } from "./stores/themes";
   import locationStore from "./stores/location";
   import { Github } from "@icons-pack/svelte-simple-icons";
   import Themes from "./components/Themes.svelte";
   import type { Maybe, Theme } from "./Model";
-import { i18nString } from "./i18n";
+  import i18n, { i18nString } from "./i18n";
   let location = new URL(window.location.href);
   locationStore.subscribe((_location) => (location = _location));
   let themes: Maybe<Record<string, Theme>> = null;
@@ -33,6 +33,7 @@ import { i18nString } from "./i18n";
   <p>{i18nString('instruction_supported_formats')}</p>
   <p>{i18nString('instruction_other_details')}</p>
   <p>{i18nString('instruction_ingestion')}</p>
+  <button on:click={loadDefaultThemes}>{i18nString('instruction_load_default_colors')}</button>
 {/if}
 <input type="file" id="data-input" multiple/>
 

@@ -30,6 +30,10 @@ const i18n = {
   instruction_ingestion: {
     en_US: "You can drag-and-drop the files or double-click anywhere in the app to open a file selector.",
     pt_BR: "Você pode arrastar e soltar os arquivos ou dar um duplo clique em qualquer lugar do app para abrir um seletor de arquivos."
+  },
+  instruction_load_default_colors: {
+    en_US: "You can also load the default pre-defined colorscheme pack.",
+    pt_BR: "Você também pode carregar o conjunto pré-definido de esquemas de cores."
   }
 };
 
