@@ -59,6 +59,12 @@ function handleOneStructure(obj: any) {
   });
 }
 
+export async function loadDefaultThemes() {
+    const assetAPI = await fetch("/nix-colors.json");
+    const assetAPIJSON = await assetAPI.json();
+    Object.values(assetAPIJSON).map(handleOneStructure);
+}
+
 function handleFilesInput(_files: FileList) {
   let files: File[] = [];
   for (let i = 0; i < _files.length; i++) {
