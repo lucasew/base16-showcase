@@ -1,7 +1,7 @@
 <script lang="ts">
   import themeStore, { loadDefaultThemes } from "./stores/themes";
   import locationStore from "./stores/location";
-  import { Github } from "@icons-pack/svelte-simple-icons";
+  import Github from "./components/Github.svelte";
   import Themes from "./components/Themes.svelte";
   import type { Maybe, Theme } from "./Model";
   import i18n, { i18nString } from "./i18n";
