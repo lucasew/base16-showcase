@@ -41,10 +41,16 @@ export type i18nKeys = keyof typeof i18n
 
 export type i18Led = Record<string, string> | string;
 
+const DEFAULT_LOCALE = 'en_US'
+
 export function i18nGet(txt: i18Led) {
   const locale =
-    navigator.language || (navigator as any).userLanguage || "default";
-  return txt[locale.replaceAll("-", "_")] || txt;
+    navigator.language || (navigator as any).userLanguage || "en_US";
+  const string = txt[locale.replaceAll("-", "_")]
+  if (!string) {
+      return txt[DEFAULT_LOCALE]
+  }
+  return string
 }
 
 export function i18nString(label: i18nKeys) {
