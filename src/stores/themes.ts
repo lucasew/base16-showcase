@@ -16,15 +16,20 @@ function normalizeColor(color: string | undefined): string {
 }
 
 function normalizeColorKeys(obj: any): any {
-  // Convert all keys to lowercase
+  // Convert all keys to lowercase, but only process color keys (base00-0f)
   const normalized: any = {};
   for (const key in obj) {
-    normalized[key.toLowerCase()] = obj[key];
+    // Only include keys that look like base colors
+    if (key.toLowerCase().match(/^base0[0-9a-f]$/)) {
+      normalized[key.toLowerCase()] = obj[key];
+    }
   }
   return normalized;
 }
 
 function handleOneStructure(obj: any, filename?: string) {
+  console.log('handleOneStructure - input obj:', obj);
+
   let slug = obj.scheme || obj.slug;
 
   // Generate automatic name if slug is missing
@@ -40,6 +45,7 @@ function handleOneStructure(obj: any, filename?: string) {
   }
   const { author } = obj;
   const colors = normalizeColorKeys(obj.colors || obj);
+  console.log('handleOneStructure - normalized colors:', colors);
 
   const theme: Theme = {
     author,
@@ -119,15 +125,20 @@ function handleFilesInput(_files: FileList) {
       // Try JSON first (regardless of file extension)
       try {
         const json = JSON.parse(content);
-        // Check if it's a collection or single theme
-        if (json.slug === undefined && json.scheme === undefined) {
+
+        // Check if it has color keys directly (single theme with colors at root)
+        const hasColorKeys = Object.keys(json).some(key =>
+          key.toLowerCase().match(/^base0[0-9a-f]$/)
+        );
+
+        if (hasColorKeys || json.slug !== undefined || json.scheme !== undefined || json.colors !== undefined) {
+          // Single theme (either has colors at root, or has slug/scheme/colors property)
+          handleOneStructure(json, filename);
+        } else {
           // Collection of themes
           Object.values(json).forEach((theme: any) => {
             handleOneStructure(theme, filename);
           });
-        } else {
-          // Single theme
-          handleOneStructure(json, filename);
         }
         return;
       } catch (jsonError) {
