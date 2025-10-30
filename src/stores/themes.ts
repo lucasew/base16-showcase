@@ -63,12 +63,12 @@ function handleOneStructure(obj: any, filename?: string) {
       base07: normalizeColor(base07),
       base08: normalizeColor(base08),
       base09: normalizeColor(base09),
-      base0a: normalizeColor(base0a),
-      base0b: normalizeColor(base0b),
-      base0c: normalizeColor(base0c),
-      base0d: normalizeColor(base0d),
-      base0e: normalizeColor(base0e),
-      base0f: normalizeColor(base0f),
+      base0A: normalizeColor(base0a),
+      base0B: normalizeColor(base0b),
+      base0C: normalizeColor(base0c),
+      base0D: normalizeColor(base0d),
+      base0E: normalizeColor(base0e),
+      base0F: normalizeColor(base0f),
     },
   };
   _themeStore.update((old) => {

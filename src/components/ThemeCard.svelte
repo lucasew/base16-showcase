@@ -17,9 +17,9 @@
     {#each Object.keys(theme.colors) as color}
       <div
         class="theme-card-color-container"
-        style="background-color: #{theme.colors[color]}"
+        style="background-color: {theme.colors[color]}"
       >
-        <p>#{theme.colors[color]}</p>
+        <p>{theme.colors[color]}</p>
       </div>
     {/each}
   </div>
