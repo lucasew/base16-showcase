@@ -12,12 +12,12 @@ export interface Theme {
     base07: string;
     base08: string;
     base09: string;
-    base0A: string;
-    base0B: string;
-    base0C: string;
-    base0D: string;
-    base0E: string;
-    base0F: string;
+    base0a: string;
+    base0b: string;
+    base0c: string;
+    base0d: string;
+    base0e: string;
+    base0f: string;
   };
 }
 

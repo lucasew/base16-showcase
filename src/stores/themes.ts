@@ -15,6 +15,15 @@ function normalizeColor(color: string | undefined): string {
   return color.startsWith('#') ? color : `#${color}`;
 }
 
+function normalizeColorKeys(obj: any): any {
+  // Convert all keys to lowercase
+  const normalized: any = {};
+  for (const key in obj) {
+    normalized[key.toLowerCase()] = obj[key];
+  }
+  return normalized;
+}
+
 function handleOneStructure(obj: any, filename?: string) {
   let slug = obj.scheme || obj.slug;
 
@@ -30,45 +39,28 @@ function handleOneStructure(obj: any, filename?: string) {
     }
   }
   const { author } = obj;
-  const colors = obj.colors || obj;
-  const {
-    base00,
-    base01,
-    base02,
-    base03,
-    base04,
-    base05,
-    base06,
-    base07,
-    base08,
-    base09,
-  } = colors;
-  const base0a = colors.base0a || colors.base0A;
-  const base0b = colors.base0b || colors.base0B;
-  const base0c = colors.base0c || colors.base0C;
-  const base0d = colors.base0d || colors.base0D;
-  const base0e = colors.base0e || colors.base0E;
-  const base0f = colors.base0f || colors.base0F;
+  const colors = normalizeColorKeys(obj.colors || obj);
+
   const theme: Theme = {
     author,
     name: slug,
     colors: {
-      base00: normalizeColor(base00),
-      base01: normalizeColor(base01),
-      base02: normalizeColor(base02),
-      base03: normalizeColor(base03),
-      base04: normalizeColor(base04),
-      base05: normalizeColor(base05),
-      base06: normalizeColor(base06),
-      base07: normalizeColor(base07),
-      base08: normalizeColor(base08),
-      base09: normalizeColor(base09),
-      base0A: normalizeColor(base0a),
-      base0B: normalizeColor(base0b),
-      base0C: normalizeColor(base0c),
-      base0D: normalizeColor(base0d),
-      base0E: normalizeColor(base0e),
-      base0F: normalizeColor(base0f),
+      base00: normalizeColor(colors.base00),
+      base01: normalizeColor(colors.base01),
+      base02: normalizeColor(colors.base02),
+      base03: normalizeColor(colors.base03),
+      base04: normalizeColor(colors.base04),
+      base05: normalizeColor(colors.base05),
+      base06: normalizeColor(colors.base06),
+      base07: normalizeColor(colors.base07),
+      base08: normalizeColor(colors.base08),
+      base09: normalizeColor(colors.base09),
+      base0a: normalizeColor(colors.base0a),
+      base0b: normalizeColor(colors.base0b),
+      base0c: normalizeColor(colors.base0c),
+      base0d: normalizeColor(colors.base0d),
+      base0e: normalizeColor(colors.base0e),
+      base0f: normalizeColor(colors.base0f),
     },
   };
   _themeStore.update((old) => {
