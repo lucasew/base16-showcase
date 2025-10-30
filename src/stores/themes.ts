@@ -7,8 +7,22 @@ const themeStore = {
   subscribe: _themeStore.subscribe.bind(_themeStore),
 };
 
-function handleOneStructure(obj: any) {
-  const slug = obj.scheme || obj.slug;
+let themeCounter = 0;
+
+function handleOneStructure(obj: any, filename?: string) {
+  let slug = obj.scheme || obj.slug;
+
+  // Generate automatic name if slug is missing
+  if (!slug) {
+    if (filename) {
+      // Use filename without extension
+      slug = filename.replace(/\.(json|yaml|yml)$/i, '');
+    } else {
+      // Fallback to counter
+      themeCounter++;
+      slug = `theme-${themeCounter}`;
+    }
+  }
   const { author } = obj;
   const colors = obj.colors || obj;
   const {
@@ -65,6 +79,35 @@ export async function loadDefaultThemes() {
     Object.values(assetAPIJSON).map(handleOneStructure);
 }
 
+function parseSimpleYaml(yaml: string): any {
+  // Parse simple YAML (one level depth)
+  let structure = {};
+  yaml
+    .split("\n")
+    .filter(line => {
+      const trimmed = line.trim();
+      return trimmed.length > 0 && !trimmed.startsWith('#');
+    })
+    .forEach((line) => {
+      const colonIndex = line.indexOf(':');
+      if (colonIndex === -1) return;
+
+      const key = line.substring(0, colonIndex).trim();
+      const value = line.substring(colonIndex + 1).trim();
+
+      if (key.length > 0) {
+        try {
+          // Try to parse value as JSON (handles strings, numbers, booleans)
+          structure[key] = JSON.parse(value);
+        } catch {
+          // If JSON parsing fails, treat as plain string
+          structure[key] = value;
+        }
+      }
+    });
+  return structure;
+}
+
 function handleFilesInput(_files: FileList) {
   let files: File[] = [];
   for (let i = 0; i < _files.length; i++) {
@@ -72,33 +115,34 @@ function handleFilesInput(_files: FileList) {
   }
   return Promise.all(
     files.map(async (file) => {
-      switch (file.type) {
-        case "application/json":
-          const json = JSON.parse(await file.text());
-          if (json.slug === undefined) {
-            Object.values(json).map(handleOneStructure);
-          } else {
-            handleOneStructure(json);
-          }
-          break;
-        case "application/x-yaml":
-          const yaml = await file.text();
-          // It's safe (i expect) to parse it as only one level depth
-          let structure = {};
-          yaml
-            .split("\n")
-            .map((line) => line.split(":"))
-            .forEach(([key, value]) => {
-              if (key.trim().length > 0) {
-                structure[key] = JSON.parse(value);
-              }
-            });
-          handleOneStructure(structure);
-          break;
-        default:
-          return;
+      const content = await file.text();
+      const filename = file.name;
+
+      // Try JSON first (regardless of file extension)
+      try {
+        const json = JSON.parse(content);
+        // Check if it's a collection or single theme
+        if (json.slug === undefined && json.scheme === undefined) {
+          // Collection of themes
+          Object.values(json).forEach((theme: any) => {
+            handleOneStructure(theme, filename);
+          });
+        } else {
+          // Single theme
+          handleOneStructure(json, filename);
+        }
+        return;
+      } catch (jsonError) {
+        // JSON parsing failed, try YAML
       }
-      // const text = await file.text()
+
+      // Try YAML parsing
+      try {
+        const structure = parseSimpleYaml(content);
+        handleOneStructure(structure, filename);
+      } catch (yamlError) {
+        console.error(`Failed to parse file ${filename}:`, yamlError);
+      }
     })
   );
 }

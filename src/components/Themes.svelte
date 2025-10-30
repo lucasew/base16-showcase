@@ -5,7 +5,7 @@
   import themeStore from "../stores/themes";
   import ThemeCard from "./ThemeCard.svelte";
 
-  let themes: Maybe<Theme[]> = null;
+  let themes: Maybe<Theme[]> = $state(null);
 
   function handleResize() {
     requestAnimationFrame(() => {

@@ -1,8 +1,12 @@
 
-    <script>
-      export let color = 'currentColor';
-      export let size = 24;
-      export let title = "github";
+    <script lang="ts">
+  interface Props {
+    color?: string;
+    size?: number;
+    title?: string;
+  }
+
+  let { color = 'currentColor', size = 24, title = "github" }: Props = $props();
     </script>
 
     <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} fill={color} viewBox="0 0 24 24">

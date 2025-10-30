@@ -1,7 +1,11 @@
 <script lang="ts">
   import type { Theme } from "../Model";
 
-  export let theme: Theme;
+  interface Props {
+    theme: Theme;
+  }
+
+  let { theme }: Props = $props();
 </script>
 
 <div class="theme-card">
