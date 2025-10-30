@@ -9,6 +9,12 @@ const themeStore = {
 
 let themeCounter = 0;
 
+function normalizeColor(color: string | undefined): string {
+  if (!color) return '';
+  // Add # prefix if missing
+  return color.startsWith('#') ? color : `#${color}`;
+}
+
 function handleOneStructure(obj: any, filename?: string) {
   let slug = obj.scheme || obj.slug;
 
@@ -47,22 +53,22 @@ function handleOneStructure(obj: any, filename?: string) {
     author,
     name: slug,
     colors: {
-      base00,
-      base01,
-      base02,
-      base03,
-      base04,
-      base05,
-      base06,
-      base07,
-      base08,
-      base09,
-      base0a,
-      base0b,
-      base0c,
-      base0d,
-      base0e,
-      base0f,
+      base00: normalizeColor(base00),
+      base01: normalizeColor(base01),
+      base02: normalizeColor(base02),
+      base03: normalizeColor(base03),
+      base04: normalizeColor(base04),
+      base05: normalizeColor(base05),
+      base06: normalizeColor(base06),
+      base07: normalizeColor(base07),
+      base08: normalizeColor(base08),
+      base09: normalizeColor(base09),
+      base0a: normalizeColor(base0a),
+      base0b: normalizeColor(base0b),
+      base0c: normalizeColor(base0c),
+      base0d: normalizeColor(base0d),
+      base0e: normalizeColor(base0e),
+      base0f: normalizeColor(base0f),
     },
   };
   _themeStore.update((old) => {
