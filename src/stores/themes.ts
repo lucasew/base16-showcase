@@ -28,8 +28,6 @@ function normalizeColorKeys(obj: any): any {
 }
 
 function handleOneStructure(obj: any, filename?: string) {
-  console.log('handleOneStructure - input obj:', obj);
-
   let slug = obj.scheme || obj.slug;
 
   // Generate automatic name if slug is missing
@@ -45,7 +43,6 @@ function handleOneStructure(obj: any, filename?: string) {
   }
   const { author } = obj;
   const colors = normalizeColorKeys(obj.colors || obj);
-  console.log('handleOneStructure - normalized colors:', colors);
 
   const theme: Theme = {
     author,
