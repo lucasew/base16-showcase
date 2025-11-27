@@ -41,7 +41,7 @@
 </script>
 
 {#if themes}
-  {#each Object.values(themes) as theme}
-    <ThemeCard {theme} />
+  {#each Object.entries(themes) as [id, theme]}
+    <ThemeCard {theme} {id} />
   {/each}
 {/if}
