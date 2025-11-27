@@ -48,8 +48,10 @@ export function i18nGet(txt: i18Led): string {
     return txt;
   }
 
-  let locale: string =
-    navigator.language || (navigator as any).userLanguage || "en_US";
+  let locale = "en_US";
+  if (typeof navigator !== "undefined") {
+    locale = navigator.language || (navigator as any).userLanguage || "en_US";
+  }
 
   locale = locale.replaceAll("-", "_");
   return (

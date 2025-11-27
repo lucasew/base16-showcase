@@ -164,29 +164,32 @@ function handleFilesInput(_files: FileList | null) {
     })
   );
 }
-document.addEventListener("drop", (ev: DragEvent) => {
-  ev.preventDefault();
-  if (ev.dataTransfer) {
-    handleFilesInput(ev.dataTransfer.files);
-  }
-});
 
-document.addEventListener("dragover", (ev) => {
-  ev.preventDefault();
-});
+if (typeof document !== "undefined") {
+  document.addEventListener("drop", (ev: DragEvent) => {
+    ev.preventDefault();
+    if (ev.dataTransfer) {
+      handleFilesInput(ev.dataTransfer.files);
+    }
+  });
 
-let doubleclickEngaged = false;
-document.addEventListener("dblclick", () => {
-  const dataInput = document.getElementById("data-input") as HTMLInputElement;
-  if (!dataInput) return;
+  document.addEventListener("dragover", (ev) => {
+    ev.preventDefault();
+  });
 
-  if (!doubleclickEngaged) {
-    dataInput.addEventListener("change", (ev: Event) => {
-      handleFilesInput((ev.target as HTMLInputElement).files);
-    });
-    doubleclickEngaged = true;
-  }
-  dataInput.click();
-});
+  let doubleclickEngaged = false;
+  document.addEventListener("dblclick", () => {
+    const dataInput = document.getElementById("data-input") as HTMLInputElement;
+    if (!dataInput) return;
+
+    if (!doubleclickEngaged) {
+      dataInput.addEventListener("change", (ev: Event) => {
+        handleFilesInput((ev.target as HTMLInputElement).files);
+      });
+      doubleclickEngaged = true;
+    }
+    dataInput.click();
+  });
+}
 
 export default themeStore;
