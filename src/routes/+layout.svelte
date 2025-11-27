@@ -8,18 +8,24 @@
   <title>{i18nString("title")}</title>
 </svelte:head>
 
-<div class="min-h-screen max-w-[max(600px,80vw)] mx-auto p-2 pt-[10vh]">
-  <h1 class="text-3xl font-bold mb-4 flex items-center gap-2">
-    {i18nString("title")}
-    <a
-      id="github-link"
-      href="https://github.com/lucasew/base16-showcase"
-      target="_blank"
-      class="hover:text-primary transition-colors"
-    >
-      <Github />
-    </a>
-  </h1>
+<div class="min-h-screen bg-base-200">
+  <div class="navbar bg-base-100 shadow-sm">
+    <div class="flex-1">
+      <a href="/" class="btn btn-ghost text-xl">{i18nString("title")}</a>
+    </div>
+    <div class="flex-none">
+      <a
+        href="https://github.com/lucasew/base16-showcase"
+        target="_blank"
+        class="btn btn-square btn-ghost"
+        aria-label="Github"
+      >
+        <Github />
+      </a>
+    </div>
+  </div>
 
-  <slot />
+  <div class="container mx-auto p-4 pt-10 max-w-[max(600px,80vw)]">
+    <slot />
+  </div>
 </div>
