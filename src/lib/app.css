@@ -1,0 +1,12 @@
+#github-link {
+  color: unset;
+}
+:global(body) {
+  min-height: 100vh;
+  max-width: max(600px, 80vw);
+  margin: 0px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0.5rem;
+  padding-top: 10vh;
+}

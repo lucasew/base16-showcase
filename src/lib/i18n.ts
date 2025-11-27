@@ -43,12 +43,20 @@ export type i18Led = Record<string, string> | string;
 
 const DEFAULT_LOCALE = 'en'
 
-export function i18nGet(txt: i18Led) {
-  let locale =
+export function i18nGet(txt: i18Led): string {
+  if (typeof txt === 'string') {
+    return txt;
+  }
+
+  let locale: string =
     navigator.language || (navigator as any).userLanguage || "en_US";
 
-  locale = locale.replaceAll("-", "_")
-  return txt[locale] || txt[locale.split('_')[0]] || txt[DEFAULT_LOCALE]
+  locale = locale.replaceAll("-", "_");
+  return (
+    (txt as Record<string, string>)[locale] ||
+    (txt as Record<string, string>)[locale.split("_")[0]] ||
+    (txt as Record<string, string>)[DEFAULT_LOCALE]
+  );
 }
 
 export function i18nString(label: i18nKeys) {

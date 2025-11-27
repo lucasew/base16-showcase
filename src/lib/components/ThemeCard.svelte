@@ -1,11 +1,11 @@
 <script lang="ts">
-  import type { Theme } from "../Model";
+  import type { Theme } from "$lib/Model";
 
   interface Props {
     theme: Theme;
   }
 
-  let { theme }: Props = $props();
+  export let theme: Theme;
 </script>
 
 <div class="theme-card">
@@ -14,12 +14,12 @@
     <p>{theme.author}</p>
   </div>
   <div class="theme-card-sample-container">
-    {#each Object.keys(theme.colors) as color}
+    {#each Object.entries(theme.colors) as [_, colorValue]}
       <div
         class="theme-card-color-container"
-        style="background-color: {theme.colors[color]}"
+        style="background-color: {colorValue}"
       >
-        <p>{theme.colors[color]}</p>
+        <p>{colorValue}</p>
       </div>
     {/each}
   </div>
