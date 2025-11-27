@@ -51,22 +51,26 @@
   </div>
 
   {#if theme}
-    <div class="content">
-      <h1>Theme Preview: {theme.name}</h1>
+    <div class="content prose max-w-none">
+      <h1>{theme.name}</h1>
 
-      <div class="card-container">
+      <div class="card-container not-prose">
         <ThemeCard {theme} />
       </div>
 
       <div class="previews">
         <div class="preview-section">
           <h3>JavaScript</h3>
-          <CodePreview {theme} language="javascript" />
+          <div class="not-prose">
+            <CodePreview {theme} language="javascript" />
+          </div>
         </div>
 
         <div class="preview-section">
           <h3>Rust</h3>
-          <CodePreview {theme} language="rust" />
+          <div class="not-prose">
+            <CodePreview {theme} language="rust" />
+          </div>
         </div>
       </div>
     </div>
@@ -126,11 +130,4 @@
     }
   }
 
-  h1 {
-    margin-bottom: 1.5rem;
-  }
-
-  h3 {
-    margin-bottom: 1rem;
-  }
 </style>
