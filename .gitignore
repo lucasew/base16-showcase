@@ -1,5 +1,6 @@
 /node_modules/
 /public/build/
+/.svelte-kit/
 
 .DS_Store
 .vercel
