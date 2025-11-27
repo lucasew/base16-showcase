@@ -8,6 +8,7 @@
   let themes: Maybe<Record<string, Theme>> = null;
 
   function handleResize() {
+    if (typeof document === "undefined") return;
     requestAnimationFrame(() => {
       const elem = document.querySelector(".theme-card-sample-container");
       if (!!elem) {
