@@ -1,11 +1,11 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
-  import type { Maybe, Theme } from "../Model";
-  import themeStore from "../stores/themes";
-  import ThemeCard from "./ThemeCard.svelte";
+  import type { Maybe, Theme } from "$lib/Model";
+  import themeStore from "$lib/stores/themes";
+  import ThemeCard from "$lib/components/ThemeCard.svelte";
 
-  let themes: Maybe<Theme[]> = $state(null);
+  let themes: Maybe<Record<string, Theme>> = null;
 
   function handleResize() {
     requestAnimationFrame(() => {
@@ -39,6 +39,8 @@
   });
 </script>
 
-{#each Object.values(themes) as theme}
-  <ThemeCard {theme} />
-{/each}
+{#if themes}
+  {#each Object.values(themes) as theme}
+    <ThemeCard {theme} />
+  {/each}
+{/if}

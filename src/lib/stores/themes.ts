@@ -1,18 +1,19 @@
 import { writable } from "svelte/store";
-import type { Maybe, Theme } from "../Model";
+import type { Maybe, Theme } from "$lib/Model";
 
 const _themeStore = writable<Maybe<Record<string, Theme>>>(null);
 
 const themeStore = {
-  subscribe: _themeStore.subscribe.bind(_themeStore),
+  subscribe: _themeStore.subscribe,
+  set: _themeStore.set,
 };
 
 let themeCounter = 0;
 
 function normalizeColor(color: string | undefined): string {
-  if (!color) return '';
+  if (!color) return "";
   // Add # prefix if missing
-  return color.startsWith('#') ? color : `#${color}`;
+  return color.startsWith("#") ? color : `#${color}`;
 }
 
 function normalizeColorKeys(obj: any): any {
@@ -34,7 +35,7 @@ function handleOneStructure(obj: any, filename?: string) {
   if (!slug) {
     if (filename) {
       // Use filename without extension
-      slug = filename.replace(/\.(json|yaml|yml)$/i, '');
+      slug = filename.replace(/\.(json|yaml|yml)$/i, "");
     } else {
       // Fallback to counter
       themeCounter++;
@@ -75,22 +76,24 @@ function handleOneStructure(obj: any, filename?: string) {
 }
 
 export async function loadDefaultThemes() {
-    const assetAPI = await fetch("/nix-colors.json");
-    const assetAPIJSON = await assetAPI.json();
-    Object.values(assetAPIJSON).map(handleOneStructure);
+  const assetAPI = await fetch("/nix-colors.json");
+  const assetAPIJSON = await assetAPI.json();
+  Object.values(assetAPIJSON).map((theme) =>
+    handleOneStructure(theme as any)
+  );
 }
 
-function parseSimpleYaml(yaml: string): any {
+function parseSimpleYaml(yaml: string): Record<string, any> {
   // Parse simple YAML (one level depth)
-  let structure = {};
+  const structure: Record<string, any> = {};
   yaml
     .split("\n")
-    .filter(line => {
+    .filter((line) => {
       const trimmed = line.trim();
-      return trimmed.length > 0 && !trimmed.startsWith('#');
+      return trimmed.length > 0 && !trimmed.startsWith("#");
     })
     .forEach((line) => {
-      const colonIndex = line.indexOf(':');
+      const colonIndex = line.indexOf(":");
       if (colonIndex === -1) return;
 
       const key = line.substring(0, colonIndex).trim();
@@ -109,10 +112,14 @@ function parseSimpleYaml(yaml: string): any {
   return structure;
 }
 
-function handleFilesInput(_files: FileList) {
+function handleFilesInput(_files: FileList | null) {
+  if (!_files) return;
   let files: File[] = [];
   for (let i = 0; i < _files.length; i++) {
-    files.push(_files.item(i));
+    const file = _files.item(i);
+    if (file) {
+      files.push(file);
+    }
   }
   return Promise.all(
     files.map(async (file) => {
@@ -124,11 +131,16 @@ function handleFilesInput(_files: FileList) {
         const json = JSON.parse(content);
 
         // Check if it has color keys directly (single theme with colors at root)
-        const hasColorKeys = Object.keys(json).some(key =>
+        const hasColorKeys = Object.keys(json).some((key) =>
           key.toLowerCase().match(/^base0[0-9a-f]$/)
         );
 
-        if (hasColorKeys || json.slug !== undefined || json.scheme !== undefined || json.colors !== undefined) {
+        if (
+          hasColorKeys ||
+          json.slug !== undefined ||
+          json.scheme !== undefined ||
+          json.colors !== undefined
+        ) {
           // Single theme (either has colors at root, or has slug/scheme/colors property)
           handleOneStructure(json, filename);
         } else {
@@ -154,7 +166,9 @@ function handleFilesInput(_files: FileList) {
 }
 document.addEventListener("drop", (ev: DragEvent) => {
   ev.preventDefault();
-  handleFilesInput(ev.dataTransfer.files);
+  if (ev.dataTransfer) {
+    handleFilesInput(ev.dataTransfer.files);
+  }
 });
 
 document.addEventListener("dragover", (ev) => {
@@ -163,15 +177,16 @@ document.addEventListener("dragover", (ev) => {
 
 let doubleclickEngaged = false;
 document.addEventListener("dblclick", () => {
+  const dataInput = document.getElementById("data-input") as HTMLInputElement;
+  if (!dataInput) return;
+
   if (!doubleclickEngaged) {
-    document
-      .getElementById("data-input")
-      .addEventListener("change", (ev: InputEvent) => {
-        handleFilesInput((ev.target as HTMLInputElement).files);
-      });
+    dataInput.addEventListener("change", (ev: Event) => {
+      handleFilesInput((ev.target as HTMLInputElement).files);
+    });
     doubleclickEngaged = true;
   }
-  document.getElementById("data-input").click();
+  dataInput.click();
 });
 
 export default themeStore;

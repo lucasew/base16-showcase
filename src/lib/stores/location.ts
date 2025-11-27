@@ -10,13 +10,13 @@ export function createUrlStore() {
     return href.set(window.location.href);
   };
 
-  history.pushState = function () {
-    originalPushState.apply(this, arguments);
+  history.pushState = function (...args: any[]) {
+    originalPushState.apply(this, args as any);
     updateHref();
   };
 
-  history.replaceState = function () {
-    originalReplaceState.apply(this, arguments);
+  history.replaceState = function (...args: any[]) {
+    originalReplaceState.apply(this, args as any);
     updateHref();
   };
 
