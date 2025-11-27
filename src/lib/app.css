@@ -1,12 +1,12 @@
-#github-link {
-  color: unset;
+@import "tailwindcss";
+@plugin "daisyui";
+
+:root {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
-:global(body) {
+
+body {
+  margin: 0;
+  padding: 0;
   min-height: 100vh;
-  max-width: max(600px, 80vw);
-  margin: 0px;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0.5rem;
-  padding-top: 10vh;
 }
