@@ -5,8 +5,7 @@
   "type": "module",
   "scripts": {
     "paraglide:compile": "npx @inlang/paraglide-js compile --project ./project.inlang --outdir ./src/lib/paraglide",
-    "predev": "npm run paraglide:compile",
-    "prebuild": "npm run paraglide:compile",
+    "postinstall": "npm run paraglide:compile",
     "dev": "vite dev",
     "build": "vite build",
     "preview": "vite preview",
