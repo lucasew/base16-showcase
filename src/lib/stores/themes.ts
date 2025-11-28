@@ -78,9 +78,7 @@ function handleOneStructure(obj: any, filename?: string) {
 export async function loadDefaultThemes() {
   const assetAPI = await fetch("/nix-colors.json");
   const assetAPIJSON = await assetAPI.json();
-  Object.values(assetAPIJSON).map((theme) =>
-    handleOneStructure(theme as any)
-  );
+  Object.values(assetAPIJSON).map((theme) => handleOneStructure(theme as any));
 }
 
 function parseSimpleYaml(yaml: string): Record<string, any> {
@@ -132,7 +130,7 @@ function handleFilesInput(_files: FileList | null) {
 
         // Check if it has color keys directly (single theme with colors at root)
         const hasColorKeys = Object.keys(json).some((key) =>
-          key.toLowerCase().match(/^base0[0-9a-f]$/)
+          key.toLowerCase().match(/^base0[0-9a-f]$/),
         );
 
         if (
@@ -161,7 +159,7 @@ function handleFilesInput(_files: FileList | null) {
       } catch (yamlError) {
         console.error(`Failed to parse file ${filename}:`, yamlError);
       }
-    })
+    }),
   );
 }
 
