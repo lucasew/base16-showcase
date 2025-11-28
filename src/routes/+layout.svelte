@@ -56,7 +56,7 @@
         </div>
 
         <div class="container mx-auto p-4 pt-10 max-w-[max(600px,80vw)]">
-            {@render children}
+            {@render children()}
         </div>
     </div>
 </ParaglideJS>
