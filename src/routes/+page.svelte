@@ -15,12 +15,12 @@
       <div class="max-w-md">
         <h1 class="text-5xl font-bold">{m.hello_world()}</h1>
         <div class="py-6 space-y-2">
-            <p>Supported formats: .yaml, .json, .tmTheme, .enc (Base16).</p>
-            <p>Drag and drop multiple files to create a combined collection of schemes.</p>
-            <p>They are processed locally in your browser.</p>
+            <p>{m.supported_formats()}</p>
+            <p>{m.drag_drop_instruction()}</p>
+            <p>{m.local_processing()}</p>
         </div>
         <button class="btn btn-primary" on:click={loadDefaultThemes}>
-          Load default colors
+          {m.load_default_colors()}
         </button>
       </div>
     </div>
