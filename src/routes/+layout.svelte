@@ -1,19 +1,31 @@
 <script lang="ts">
   import Github from "$lib/components/Github.svelte";
-  import i18n, { i18nString } from "$lib/i18n";
+  import { ParaglideJS } from "@inlang/paraglide-js-adapter-sveltekit";
+  import { i18n } from "$lib/i18n";
+  import * as m from "$lib/paraglide/messages.js";
+  import { page } from "$app/stores";
   import "$lib/app.css";
 </script>
 
-<svelte:head>
-  <title>{i18nString("title")}</title>
-</svelte:head>
-
+<ParaglideJS {i18n}>
 <div class="min-h-screen bg-base-200">
   <div class="navbar bg-base-100 shadow-sm">
     <div class="flex-1">
-      <a href="/" class="btn btn-ghost text-xl">{i18nString("title")}</a>
+      <a href="/" class="btn btn-ghost text-xl">{m.title()}</a>
     </div>
     <div class="flex-none flex items-center gap-2">
+      <div class="dropdown dropdown-end">
+        <div tabindex="0" role="button" class="btn btn-ghost">
+          {$page.data.paraglide?.lang || 'Language'}
+        </div>
+        <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+        <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+            {#each ["en", "pt", "es"] as lang}
+            <li><a href={i18n.resolveRoute($page.url.pathname, lang)} hreflang={lang}>{lang.toUpperCase()}</a></li>
+            {/each}
+        </ul>
+      </div>
+
       <label class="swap swap-rotate btn btn-square btn-ghost">
         <input type="checkbox" class="theme-controller" value="dark" />
 
@@ -50,3 +62,4 @@
     <slot />
   </div>
 </div>
+</ParaglideJS>

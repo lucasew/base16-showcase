@@ -1,0 +1,1 @@
+{"sourceLanguageTag": "en", "languageTags": ["en", "pt", "es"], "modules": ["https://cdn.jsdelivr.net/npm/@inlang/message-lint-rule-valid-js-identifier@latest/dist/index.js", "https://cdn.jsdelivr.net/npm/@inlang/plugin-message-format@latest/dist/index.js"], "plugin.inlang.messageFormat": {"pathPattern": "./messages/{languageTag}.json"}}

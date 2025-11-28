@@ -6,3 +6,5 @@
 .DS_Store
 .vercel
 dist
+project.inlang/cache
+.inlang/cache
