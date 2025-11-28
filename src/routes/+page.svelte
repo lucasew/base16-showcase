@@ -10,7 +10,7 @@
     <div class="hero min-h-[50vh] bg-base-100 rounded-box shadow-xl">
         <div class="hero-content text-center">
             <div class="max-w-md">
-                <h1 class="text-5xl font-bold">{m.hello_world()}</h1>
+                <h1 class="text-5xl font-bold">{m.app_title()}</h1>
                 <div class="py-6 space-y-2">
                     <p>
                         {m.supported_formats()} .yaml, .json, .tmTheme, .enc (Base16).
@@ -25,10 +25,4 @@
         </div>
     </div>
 {/if}
-<input type="file" id="data-input" multiple />
-
-<style>
-    #data-input {
-        display: none;
-    }
-</style>
+<input class="hidden" type="file" id="data-input" multiple />
