@@ -23,7 +23,7 @@
         <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
         <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
             {#each ["en", "de", "es", "pt"] as lang}
-            <li><a href="?lang={lang}" hreflang={lang}>{lang.toUpperCase()}</a></li>
+            <li><a href="/?lang={lang}" hreflang={lang}>{lang.toUpperCase()}</a></li>
             {/each}
         </ul>
       </div>
