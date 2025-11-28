@@ -4,8 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite dev",
-    "build": "vite build",
+    "paraglide:compile": "npx @inlang/paraglide-js compile --project ./project.inlang --outdir ./src/lib/paraglide",
+    "prepare": "bun run paraglide:compile",
+    "dev": "bun run paraglide:compile && vite dev",
+    "build": "bun run paraglide:compile && vite build",
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
