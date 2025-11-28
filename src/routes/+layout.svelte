@@ -1,32 +1,14 @@
 <script lang="ts">
   import Github from "$lib/components/Github.svelte";
-  import { ParaglideJS } from "@inlang/paraglide-js-adapter-sveltekit";
-  import { createI18n } from "@inlang/paraglide-js-adapter-sveltekit";
-  import * as runtime from "$lib/paraglide/runtime.js";
-  import { page } from "$app/stores";
   import * as m from "$lib/paraglide/messages.js";
   import "$lib/app.css";
-
-  const i18n = createI18n(runtime);
 </script>
-<ParaglideJS {i18n}>
 <div class="min-h-screen bg-base-200">
   <div class="navbar bg-base-100 shadow-sm">
     <div class="flex-1">
       <a href="/" class="btn btn-ghost text-xl">{m.app_title()}</a>
     </div>
     <div class="flex-none flex items-center gap-2">
-      <div class="dropdown dropdown-end">
-        <div tabindex="0" role="button" class="btn btn-ghost">
-          {m.language()}
-        </div>
-        <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
-        <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
-            {#each ["en", "de", "es", "pt"] as lang}
-            <li><a href="/?lang={lang}" hreflang={lang}>{lang.toUpperCase()}</a></li>
-            {/each}
-        </ul>
-      </div>
 
       <label class="swap swap-rotate btn btn-square btn-ghost">
         <input type="checkbox" class="theme-controller" value="dark" />
@@ -64,4 +46,3 @@
     <slot />
   </div>
 </div>
-</ParaglideJS>
