@@ -1,3 +1,15 @@
 // src/hooks.server.js
-import { i18n } from "$lib/i18n.js";
-export const handle = i18n.handle();
+import { paraglideMiddleware } from "$lib/paraglide/server.js";
+
+/** @type {import('@sveltejs/kit').Handle} */
+export const handle = ({ event, resolve }) =>
+  paraglideMiddleware(
+    event.request,
+    ({ request: localizedRequest, locale }) => {
+      event.request = localizedRequest;
+      return resolve(event, {
+        transformPageChunk: ({ html }) =>
+          html.replace("%paraglide.lang%", locale),
+      });
+    },
+  );

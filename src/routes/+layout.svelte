@@ -1,15 +1,12 @@
 <script lang="ts">
     import Github from "$lib/components/Github.svelte";
     import "$lib/app.css";
-    import { ParaglideJS } from "@inlang/paraglide-sveltekit";
-    import { i18n } from "$lib/i18n.js";
     import * as m from "$lib/paraglide/messages.js";
 
     const { children } = $props();
 </script>
 
-<ParaglideJS {i18n}>
-    <div class="min-h-screen bg-base-200">
+<div class="min-h-screen bg-base-200">
         <div class="navbar bg-base-100 shadow-sm">
             <div class="flex-1">
                 <a href="/" class="btn btn-ghost text-xl">{m.app_title()}</a>
@@ -59,4 +56,3 @@
             {@render children()}
         </div>
     </div>
-</ParaglideJS>

@@ -1,3 +1,7 @@
 // src/hooks.js
-import { i18n } from "$lib/i18n.js";
-export const reroute = i18n.reroute();
+import { deLocalizeUrl } from "$lib/paraglide/runtime.js";
+
+/** @type {import('@sveltejs/kit').Reroute} */
+export const reroute = (request) => {
+  return deLocalizeUrl(request.url).pathname;
+};
