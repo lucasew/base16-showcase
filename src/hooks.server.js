@@ -1,2 +1,7 @@
-import { i18n } from "$lib/i18n.js"
-export const handle = i18n.handle()
+import { paraglideMiddleware } from "$lib/paraglide/server.js"
+
+export const handle = async ({ event, resolve }) => {
+	return paraglideMiddleware(event.request, ({ request, locale }) => {
+		return resolve(event)
+	})
+}

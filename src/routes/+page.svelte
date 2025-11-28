@@ -15,7 +15,7 @@
       <div class="max-w-md">
         <h1 class="text-5xl font-bold">{m.hello_world()}</h1>
         <div class="py-6 space-y-2">
-            <p>{m.supported_formats()}</p>
+            <p>{m.supported_formats()} .yaml, .json, .tmTheme, .enc (Base16).</p>
             <p>{m.drag_drop_instruction()}</p>
             <p>{m.local_processing()}</p>
         </div>
