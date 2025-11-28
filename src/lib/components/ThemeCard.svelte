@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Theme } from "$lib/Model";
+  import * as m from "$lib/paraglide/messages.js";
 
   interface Props {
     theme: Theme;
@@ -23,7 +24,7 @@
             {theme.name}
           {/if}
         </h2>
-        <p class="text-xs text-base-content/70">by {theme.author}</p>
+        <p class="text-xs text-base-content/70">{m.by()} {theme.author}</p>
       </div>
     </div>
 
@@ -44,7 +45,7 @@
     {#if id}
       <div class="card-actions justify-end mt-4">
         <a href="/preview/{id}" class="btn btn-sm btn-outline btn-primary">
-          Preview
+          {m.preview()}
         </a>
       </div>
     {/if}

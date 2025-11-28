@@ -5,6 +5,7 @@
   import ThemeCard from "$lib/components/ThemeCard.svelte";
   import CodePreview from "$lib/components/CodePreview.svelte";
   import { onMount } from "svelte";
+  import * as m from "$lib/paraglide/messages.js";
 
   let themes: Maybe<Record<string, Theme>> = null;
   themeStore.subscribe((_themes) => (themes = _themes));
@@ -47,7 +48,7 @@
 
 <div class="preview-page">
   <div class="header">
-    <a href="/" class="back-link">← Back to Themes</a>
+    <a href="/" class="back-link">{m.back_to_themes()}</a>
   </div>
 
   {#if theme}
@@ -60,14 +61,14 @@
 
       <div class="previews">
         <div class="preview-section">
-          <h3>JavaScript</h3>
+          <h3>{m.javascript()}</h3>
           <div class="not-prose">
             <CodePreview {theme} language="javascript" />
           </div>
         </div>
 
         <div class="preview-section">
-          <h3>Rust</h3>
+          <h3>{m.rust()}</h3>
           <div class="not-prose">
             <CodePreview {theme} language="rust" />
           </div>
@@ -76,13 +77,13 @@
     </div>
   {:else if themes}
     <div class="error">
-      <h2>Theme not found</h2>
-      <p>The theme "{themeId}" could not be found.</p>
-      <a href="/">Return to Home</a>
+      <h2>{m.theme_not_found()}</h2>
+      <p>{m.theme_not_found_description({id: themeId})}</p>
+      <a href="/">{m.return_to_home()}</a>
     </div>
   {:else}
     <div class="loading">
-      <p>Loading themes...</p>
+      <p>{m.loading_themes()}</p>
     </div>
   {/if}
 </div>
