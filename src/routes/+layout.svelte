@@ -3,6 +3,7 @@
     import "$lib/app.css";
     import { ParaglideJS } from "@inlang/paraglide-sveltekit";
     import { i18n } from "$lib/i18n.js";
+    import * as m from "$lib/paraglide/messages.js";
 
     const { children } = $props();
 </script>

@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "paraglide:compile": "paraglide-js compile --project ./project.inlang --outdir ./src/lib/paraglide",
+    "paraglide:compile": "npx @inlang/paraglide-js compile --project ./project.inlang --outdir ./src/lib/paraglide",
     "postinstall": "npm run paraglide:compile",
     "dev": "vite dev",
     "build": "vite build",
