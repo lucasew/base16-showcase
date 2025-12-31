@@ -28,8 +28,17 @@ function normalizeColorKeys(obj: any): any {
   return normalized;
 }
 
+function sanitizeSlug(slug: string): string {
+  const forbidden = ["__proto__", "constructor", "prototype"];
+  if (forbidden.includes(slug)) {
+    // Prepend "safe-" to dangerous slugs to neutralize them.
+    return `safe-${slug}`;
+  }
+  return slug;
+}
+
 function handleOneStructure(obj: any, filename?: string) {
-  let slug = obj.scheme || obj.slug;
+  let slug = sanitizeSlug(obj.scheme || obj.slug);
 
   // Generate automatic name if slug is missing
   if (!slug) {
