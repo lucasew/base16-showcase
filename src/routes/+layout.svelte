@@ -2,28 +2,23 @@
     import Github from "$lib/components/Github.svelte";
     import "$lib/app.css";
     import * as m from "$lib/paraglide/messages.js";
-    import { onMount } from "svelte";
+    import { browser } from "$app/environment";
 
     const { children } = $props();
 
     let isDark = $state(false);
 
-    onMount(() => {
-        // Load theme from localStorage or use prefers-color-scheme
+    if (browser) {
         const savedTheme = localStorage.getItem("theme");
         if (savedTheme) {
             isDark = savedTheme === "dark";
         } else {
-            // Check system preference
             isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
         }
-
-        const theme = isDark ? "dark" : "light";
-        document.documentElement.setAttribute("data-theme", theme);
-    });
+    }
 
     $effect(() => {
-        // Update theme whenever isDark changes
+        if (!browser) return;
         const theme = isDark ? "dark" : "light";
         document.documentElement.setAttribute("data-theme", theme);
         localStorage.setItem("theme", theme);
