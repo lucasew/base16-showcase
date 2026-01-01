@@ -119,57 +119,51 @@ function parseSimpleYaml(yaml: string): Record<string, any> {
   return structure;
 }
 
+async function processFile(file: File) {
+  const content = await file.text();
+  const filename = file.name;
+
+  // Try JSON first (regardless of file extension)
+  try {
+    const json = JSON.parse(content);
+
+    // Check if it has color keys directly (single theme with colors at root)
+    const hasColorKeys = Object.keys(json).some((key) =>
+      key.toLowerCase().match(/^base0[0-9a-f]$/),
+    );
+
+    if (
+      hasColorKeys ||
+      json.slug !== undefined ||
+      json.scheme !== undefined ||
+      json.colors !== undefined
+    ) {
+      // Single theme (either has colors at root, or has slug/scheme/colors property)
+      handleOneStructure(json, filename);
+    } else {
+      // Collection of themes
+      Object.values(json).forEach((theme: any) => {
+        handleOneStructure(theme, filename);
+      });
+    }
+    return;
+  } catch (jsonError) {
+    // JSON parsing failed, try YAML
+  }
+
+  // Try YAML parsing
+  try {
+    const structure = parseSimpleYaml(content);
+    handleOneStructure(structure, filename);
+  } catch (yamlError) {
+    console.error(`Failed to parse file ${filename}:`, yamlError);
+  }
+}
+
 function handleFilesInput(_files: FileList | null) {
   if (!_files) return;
-  let files: File[] = [];
-  for (let i = 0; i < _files.length; i++) {
-    const file = _files.item(i);
-    if (file) {
-      files.push(file);
-    }
-  }
-  return Promise.all(
-    files.map(async (file) => {
-      const content = await file.text();
-      const filename = file.name;
-
-      // Try JSON first (regardless of file extension)
-      try {
-        const json = JSON.parse(content);
-
-        // Check if it has color keys directly (single theme with colors at root)
-        const hasColorKeys = Object.keys(json).some((key) =>
-          key.toLowerCase().match(/^base0[0-9a-f]$/),
-        );
-
-        if (
-          hasColorKeys ||
-          json.slug !== undefined ||
-          json.scheme !== undefined ||
-          json.colors !== undefined
-        ) {
-          // Single theme (either has colors at root, or has slug/scheme/colors property)
-          handleOneStructure(json, filename);
-        } else {
-          // Collection of themes
-          Object.values(json).forEach((theme: any) => {
-            handleOneStructure(theme, filename);
-          });
-        }
-        return;
-      } catch (jsonError) {
-        // JSON parsing failed, try YAML
-      }
-
-      // Try YAML parsing
-      try {
-        const structure = parseSimpleYaml(content);
-        handleOneStructure(structure, filename);
-      } catch (yamlError) {
-        console.error(`Failed to parse file ${filename}:`, yamlError);
-      }
-    }),
-  );
+  const files = Array.from(_files);
+  return Promise.all(files.map(processFile));
 }
 
 if (typeof document !== "undefined") {
