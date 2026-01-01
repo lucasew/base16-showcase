@@ -78,7 +78,7 @@
   {:else if themes}
     <div class="error">
       <h2>{m.theme_not_found()}</h2>
-      <p>{m.theme_not_found_description({id: themeId})}</p>
+      <p>{m.theme_not_found_description({ id: themeId ?? "" })}</p>
       <a href="/">{m.return_to_home()}</a>
     </div>
   {:else}
