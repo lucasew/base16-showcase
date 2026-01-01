@@ -37,6 +37,14 @@ function sanitizeSlug(slug: string): string {
   return slug;
 }
 
+function sanitizeKey(key: string): string {
+  const forbidden = ["__proto__", "constructor", "prototype"];
+  if (forbidden.includes(key)) {
+    return `safe-${key}`;
+  }
+  return key;
+}
+
 function handleOneStructure(obj: any, filename?: string) {
   let slug = sanitizeSlug(obj.scheme || obj.slug);
 
@@ -103,10 +111,11 @@ function parseSimpleYaml(yaml: string): Record<string, any> {
       const colonIndex = line.indexOf(":");
       if (colonIndex === -1) return;
 
-      const key = line.substring(0, colonIndex).trim();
+      const rawKey = line.substring(0, colonIndex).trim();
       const value = line.substring(colonIndex + 1).trim();
 
-      if (key.length > 0) {
+      if (rawKey.length > 0) {
+        const key = sanitizeKey(rawKey);
         try {
           // Try to parse value as JSON (handles strings, numbers, booleans)
           structure[key] = JSON.parse(value);
