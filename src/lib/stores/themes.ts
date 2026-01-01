@@ -12,8 +12,15 @@ let themeCounter = 0;
 
 function normalizeColor(color: string | undefined): string {
   if (!color) return "";
-  // Add # prefix if missing
-  return color.startsWith("#") ? color : `#${color}`;
+  const hex = color.startsWith("#") ? color.substring(1) : color;
+
+  // Validate that the color is a valid hex code to prevent CSS injection.
+  // It must only contain hex characters and have a valid length (3, 4, 6, or 8).
+  if (!/^[0-9a-fA-F]+$/.test(hex) || ![3, 4, 6, 8].includes(hex.length)) {
+    return ""; // Return a safe, empty string if invalid.
+  }
+
+  return `#${hex}`;
 }
 
 function normalizeColorKeys(obj: any): any {
