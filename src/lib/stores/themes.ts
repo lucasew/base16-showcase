@@ -72,24 +72,12 @@ function handleOneStructure(obj: any, filename?: string) {
   const theme: Theme = {
     author,
     name: slug,
-    colors: {
-      base00: normalizeColor(colors.base00),
-      base01: normalizeColor(colors.base01),
-      base02: normalizeColor(colors.base02),
-      base03: normalizeColor(colors.base03),
-      base04: normalizeColor(colors.base04),
-      base05: normalizeColor(colors.base05),
-      base06: normalizeColor(colors.base06),
-      base07: normalizeColor(colors.base07),
-      base08: normalizeColor(colors.base08),
-      base09: normalizeColor(colors.base09),
-      base0a: normalizeColor(colors.base0a),
-      base0b: normalizeColor(colors.base0b),
-      base0c: normalizeColor(colors.base0c),
-      base0d: normalizeColor(colors.base0d),
-      base0e: normalizeColor(colors.base0e),
-      base0f: normalizeColor(colors.base0f),
-    },
+    colors: Object.fromEntries(
+      Array.from({ length: 16 }, (_, i) => {
+        const key = `base0${i.toString(16)}` as keyof Theme["colors"];
+        return [key, normalizeColor(colors[key])];
+      }),
+    ) as Theme["colors"],
   };
   _themeStore.update((old) => {
     return {
