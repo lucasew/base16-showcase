@@ -52,6 +52,13 @@ function sanitizeKey(key: string): string {
   return key;
 }
 
+function sanitizeText(text: string | undefined): string {
+  if (!text) return "";
+  // Basic HTML tag stripping to prevent XSS.
+  // Not a comprehensive sanitizer, but sufficient for this context.
+  return text.replace(/<[^>]*>?/gm, "");
+}
+
 function handleOneStructure(obj: any, filename?: string) {
   let slug = sanitizeSlug(obj.scheme || obj.slug);
 
@@ -70,8 +77,8 @@ function handleOneStructure(obj: any, filename?: string) {
   const colors = normalizeColorKeys(obj.colors || obj);
 
   const theme: Theme = {
-    author,
-    name: slug,
+    author: sanitizeText(author),
+    name: sanitizeText(slug),
     colors: Object.fromEntries(
       Array.from({ length: 16 }, (_, i) => {
         const key = `base0${i.toString(16)}` as keyof Theme["colors"];
