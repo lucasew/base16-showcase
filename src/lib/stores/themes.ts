@@ -164,17 +164,17 @@ async function processFile(file: File) {
   }
 }
 
-function handleFilesInput(_files: FileList | null) {
+function processThemeFiles(_files: FileList | null): void {
   if (!_files) return;
   const files = Array.from(_files);
-  return Promise.all(files.map(processFile));
+  files.forEach(processFile);
 }
 
 if (typeof document !== "undefined") {
   document.addEventListener("drop", (ev: DragEvent) => {
     ev.preventDefault();
     if (ev.dataTransfer) {
-      handleFilesInput(ev.dataTransfer.files);
+      processThemeFiles(ev.dataTransfer.files);
     }
   });
 
@@ -189,7 +189,7 @@ if (typeof document !== "undefined") {
 
     if (!doubleclickEngaged) {
       dataInput.addEventListener("change", (ev: Event) => {
-        handleFilesInput((ev.target as HTMLInputElement).files);
+        processThemeFiles((ev.target as HTMLInputElement).files);
       });
       doubleclickEngaged = true;
     }
