@@ -90,9 +90,9 @@ function handleOneStructure(obj: any, filename?: string) {
 export async function loadDefaultThemes() {
   const assetAPI = await fetch("/nix-colors.json");
   const assetAPIJSON = await assetAPI.json();
-  Object.values(assetAPIJSON).forEach((theme) =>
-    handleOneStructure(theme as any),
-  );
+  for (const theme of Object.values(assetAPIJSON)) {
+    handleOneStructure(theme as any);
+  }
 }
 
 function parseSimpleYaml(yaml: string): Record<string, any> {
