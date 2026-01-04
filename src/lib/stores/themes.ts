@@ -124,6 +124,13 @@ function parseSimpleYaml(yaml: string): Record<string, any> {
 }
 
 async function processFile(file: File) {
+  const MAX_FILE_SIZE = 1024 * 1024; // 1MB
+  if (file.size > MAX_FILE_SIZE) {
+    console.error(
+      `File ${file.name} exceeds the maximum size of ${MAX_FILE_SIZE / 1024 / 1024}MB.`,
+    );
+    return;
+  }
   const content = await file.text();
   const filename = file.name;
 
