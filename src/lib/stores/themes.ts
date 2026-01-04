@@ -126,10 +126,12 @@ function parseSimpleYaml(yaml: string): Record<string, any> {
 async function processFile(file: File) {
   const MAX_FILE_SIZE = 1024 * 1024; // 1MB
   if (file.size > MAX_FILE_SIZE) {
-    console.error(
-      `File ${file.name} exceeds the maximum size of ${MAX_FILE_SIZE / 1024 / 1024}MB.`,
+    const userConfirmed = window.confirm(
+      `File "${file.name}" is larger than ${MAX_FILE_SIZE / 1024 / 1024}MB. Processing large files may cause performance issues. Do you want to continue?`,
     );
-    return;
+    if (!userConfirmed) {
+      return; // Stop if the user cancels
+    }
   }
   const content = await file.text();
   const filename = file.name;
