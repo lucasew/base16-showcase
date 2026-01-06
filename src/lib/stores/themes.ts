@@ -95,6 +95,31 @@ export async function loadDefaultThemes() {
   }
 }
 
+function parseYamlValue(value: string): string | number | boolean {
+  // Safely parse a YAML value without using JSON.parse to prevent prototype pollution.
+  const trimmedValue = value.trim();
+
+  // Boolean check
+  if (trimmedValue === "true") return true;
+  if (trimmedValue === "false") return false;
+
+  // Number check (integer or float)
+  const num = Number(trimmedValue);
+  if (!isNaN(num) && isFinite(num) && trimmedValue !== "") {
+    return num;
+  }
+
+  // String fallback (remove quotes if present)
+  if (
+    (trimmedValue.startsWith('"') && trimmedValue.endsWith('"')) ||
+    (trimmedValue.startsWith("'") && trimmedValue.endsWith("'"))
+  ) {
+    return trimmedValue.slice(1, -1);
+  }
+
+  return trimmedValue;
+}
+
 function parseSimpleYaml(yaml: string): Record<string, any> {
   // Parse simple YAML (one level depth)
   const structure: Record<string, any> = {};
@@ -113,13 +138,7 @@ function parseSimpleYaml(yaml: string): Record<string, any> {
 
       if (rawKey.length > 0) {
         const key = sanitizeKey(rawKey);
-        try {
-          // Try to parse value as JSON (handles strings, numbers, booleans)
-          structure[key] = JSON.parse(value);
-        } catch {
-          // If JSON parsing fails, treat as plain string
-          structure[key] = value;
-        }
+        structure[key] = parseYamlValue(value);
       }
     });
   return structure;
