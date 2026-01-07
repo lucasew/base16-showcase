@@ -52,6 +52,17 @@ function sanitizeKey(key: string): string {
   return key;
 }
 
+function sanitizeText(text: string | undefined): string {
+  if (typeof text !== 'string') return '';
+  // Escape HTML characters to prevent XSS
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 function handleOneStructure(obj: any, filename?: string) {
   let slug = sanitizeSlug(obj.scheme || obj.slug);
 
@@ -70,8 +81,8 @@ function handleOneStructure(obj: any, filename?: string) {
   const colors = normalizeColorKeys(obj.colors || obj);
 
   const theme: Theme = {
-    author,
-    name: slug,
+    author: sanitizeText(author),
+    name: sanitizeText(slug),
     colors: Object.fromEntries(
       Array.from({ length: 16 }, (_, i) => {
         const key = `base0${i.toString(16)}` as keyof Theme["colors"];
