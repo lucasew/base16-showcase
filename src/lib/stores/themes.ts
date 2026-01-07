@@ -35,25 +35,18 @@ function normalizeColorKeys(obj: any): any {
   return normalized;
 }
 
-function sanitizeSlug(slug: string): string {
-  const forbidden = ["__proto__", "constructor", "prototype"];
-  if (forbidden.includes(slug)) {
-    // Prepend "safe-" to dangerous slugs to neutralize them.
-    return `safe-${slug}`;
-  }
-  return slug;
-}
+const FORBIDDEN_KEYS = ["__proto__", "constructor", "prototype"];
 
-function sanitizeKey(key: string): string {
-  const forbidden = ["__proto__", "constructor", "prototype"];
-  if (forbidden.includes(key)) {
+function sanitize(key: string): string {
+  if (FORBIDDEN_KEYS.includes(key)) {
+    // Prepend "safe-" to dangerous keys to neutralize them.
     return `safe-${key}`;
   }
   return key;
 }
 
 function handleOneStructure(obj: any, filename?: string) {
-  let slug = sanitizeSlug(obj.scheme || obj.slug);
+  let slug = sanitize(obj.scheme || obj.slug);
 
   // Generate automatic name if slug is missing
   if (!slug) {
@@ -137,7 +130,7 @@ function parseSimpleYaml(yaml: string): Record<string, any> {
       const value = line.substring(colonIndex + 1).trim();
 
       if (rawKey.length > 0) {
-        const key = sanitizeKey(rawKey);
+        const key = sanitize(rawKey);
         structure[key] = parseYamlValue(value);
       }
     });
