@@ -115,26 +115,28 @@ function parseYamlValue(value: string): string | number | boolean {
 
 function parseSimpleYaml(yaml: string): Record<string, any> {
   // Parse simple YAML (one level depth)
-  const structure: Record<string, any> = {};
-  yaml
-    .split("\n")
-    .filter((line) => {
-      const trimmed = line.trim();
-      return trimmed.length > 0 && !trimmed.startsWith("#");
-    })
-    .forEach((line) => {
-      const colonIndex = line.indexOf(":");
-      if (colonIndex === -1) return;
+  return yaml.split("\n").reduce((structure: Record<string, any>, line: string) => {
+    const trimmedLine = line.trim();
+    if (trimmedLine.length === 0 || trimmedLine.startsWith("#")) {
+      return structure;
+    }
 
-      const rawKey = line.substring(0, colonIndex).trim();
-      const value = line.substring(colonIndex + 1).trim();
+    const colonIndex = trimmedLine.indexOf(":");
+    if (colonIndex === -1) {
+      return structure;
+    }
 
-      if (rawKey.length > 0) {
-        const key = sanitize(rawKey);
-        structure[key] = parseYamlValue(value);
-      }
-    });
-  return structure;
+    const rawKey = trimmedLine.substring(0, colonIndex).trim();
+    if (rawKey.length === 0) {
+      return structure;
+    }
+
+    const value = trimmedLine.substring(colonIndex + 1).trim();
+    const key = sanitize(rawKey);
+    structure[key] = parseYamlValue(value);
+
+    return structure;
+  }, {});
 }
 
 async function processFile(file: File) {
