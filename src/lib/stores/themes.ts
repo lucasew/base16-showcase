@@ -45,6 +45,16 @@ function sanitize(key: string): string {
   return key;
 }
 
+function sanitizeHTML(str: string): string {
+  if (!str) return "";
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 function handleOneStructure(obj: any, filename?: string) {
   let slug = sanitize(obj.scheme || obj.slug);
 
@@ -63,8 +73,8 @@ function handleOneStructure(obj: any, filename?: string) {
   const colors = normalizeColorKeys(obj.colors || obj);
 
   const theme: Theme = {
-    author,
-    name: slug,
+    author: sanitizeHTML(author),
+    name: sanitizeHTML(slug),
     colors: Object.fromEntries(
       Array.from({ length: 16 }, (_, i) => {
         const key = `base0${i.toString(16)}` as keyof Theme["colors"];
