@@ -11,8 +11,10 @@ const themeStore = {
 let themeCounter = 0;
 
 function normalizeColor(color: string | undefined): string {
-  if (!color) return "";
-  const hex = color.startsWith("#") ? color.substring(1) : color;
+  if (color === undefined || color === null) return "";
+  // Coerce to string to handle number-like color codes (e.g., `ffffff`) that might be parsed as numbers.
+  const colorStr = String(color);
+  const hex = colorStr.startsWith("#") ? colorStr.substring(1) : colorStr;
 
   // Validate that the color is a valid hex code to prevent CSS injection.
   // It must only contain hex characters and have a valid length (3, 4, 6, or 8).
