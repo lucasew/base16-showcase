@@ -83,9 +83,9 @@ function handleOneStructure(obj: any, filename?: string) {
 export async function loadDefaultThemes() {
   const assetAPI = await fetch("/nix-colors.json");
   const assetAPIJSON = await assetAPI.json();
-  for (const theme of Object.values(assetAPIJSON)) {
+  Object.values(assetAPIJSON).forEach((theme) => {
     handleOneStructure(theme as any);
-  }
+  });
 }
 
 function parseYamlValue(value: string): string | number | boolean {
