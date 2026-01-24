@@ -10,13 +10,17 @@ const themeStore = {
 
 let themeCounter = 0;
 
+const HEX_COLOR_REGEX = /^[0-9a-fA-F]+$/;
+const BASE_COLOR_KEY_REGEX = /^base0[0-9a-f]$/;
+const FILE_EXTENSION_REGEX = /\.(json|yaml|yml)$/i;
+
 function normalizeColor(color: string | undefined): string {
   if (!color) return "";
   const hex = color.startsWith("#") ? color.substring(1) : color;
 
   // Validate that the color is a valid hex code to prevent CSS injection.
   // It must only contain hex characters and have a valid length (3, 4, 6, or 8).
-  if (!/^[0-9a-fA-F]+$/.test(hex) || ![3, 4, 6, 8].includes(hex.length)) {
+  if (!HEX_COLOR_REGEX.test(hex) || ![3, 4, 6, 8].includes(hex.length)) {
     return ""; // Return a safe, empty string if invalid.
   }
 
@@ -28,7 +32,7 @@ function normalizeColorKeys(obj: any): any {
   const normalized: any = {};
   for (const key in obj) {
     // Only include keys that look like base colors
-    if (key.toLowerCase().match(/^base0[0-9a-f]$/)) {
+    if (BASE_COLOR_KEY_REGEX.test(key.toLowerCase())) {
       normalized[key.toLowerCase()] = obj[key];
     }
   }
@@ -52,7 +56,7 @@ function handleOneStructure(obj: any, filename?: string) {
   if (!slug) {
     if (filename) {
       // Use filename without extension
-      slug = filename.replace(/\.(json|yaml|yml)$/i, "");
+      slug = filename.replace(FILE_EXTENSION_REGEX, "");
     } else {
       // Fallback to counter
       themeCounter++;
@@ -158,7 +162,7 @@ async function processFile(file: File) {
 
     // Check if it has color keys directly (single theme with colors at root)
     const hasColorKeys = Object.keys(json).some((key) =>
-      key.toLowerCase().match(/^base0[0-9a-f]$/),
+      BASE_COLOR_KEY_REGEX.test(key.toLowerCase()),
     );
 
     if (
