@@ -1,2 +1,13 @@
 [tools]
 bun = "1.3.6"
+
+[tasks]
+install = "bun install"
+codegen = "npm run paraglide:compile"
+"lint:eslint" = "eslint ."
+"lint:prettier" = "prettier --check ."
+"lint:check" = "bun run check"
+lint = { depends = ["lint:eslint", "lint:prettier", "lint:check"] }
+build = "bun run build"
+test = "echo 'No tests found'"
+ci = { depends = ["lint", "build"] }

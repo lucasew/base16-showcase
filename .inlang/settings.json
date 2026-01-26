@@ -1,1 +1,8 @@
-{"sourceLanguageTag": "en", "languageTags": ["en", "de", "es", "pt"], "modules": ["https://cdn.jsdelivr.net/npm/@inlang/message-lint-rule-valid-js-identifier@latest/dist/index.js", "https://cdn.jsdelivr.net/npm/@inlang/plugin-message-format@latest/dist/index.js"]}
+{
+	"sourceLanguageTag": "en",
+	"languageTags": ["en", "de", "es", "pt"],
+	"modules": [
+		"https://cdn.jsdelivr.net/npm/@inlang/message-lint-rule-valid-js-identifier@latest/dist/index.js",
+		"https://cdn.jsdelivr.net/npm/@inlang/plugin-message-format@latest/dist/index.js"
+	]
+}
