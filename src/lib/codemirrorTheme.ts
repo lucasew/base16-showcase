@@ -25,19 +25,6 @@ export function createBase16Theme(theme: Theme): Extension {
   // base0E: Keywords, Storage, Selector, Markup Italic, Diff Changed
   // base0F: Deprecated, Opening/Closing Embedded Language Tags, e.g. <?php ?>
 
-  const invalid = colors.base0f; // Deprecated/invalid
-  const variable = colors.base08;
-  const keyword = colors.base0e;
-  const atom = colors.base09; // Boolean, constants
-  const number = colors.base09;
-  const definition = colors.base0d; // Functions/Methods
-  const string = colors.base0b;
-  const string2 = colors.base0b;
-  const property = colors.base08; // Variables/Tags? Maybe base05 or base08
-  const comment = colors.base03;
-  const meta = colors.base0a; // Classes?
-  const attribute = colors.base09; // XML Attributes
-
   // Editor UI Theme
   const editorTheme = EditorView.theme({
     "&": {
@@ -72,22 +59,22 @@ export function createBase16Theme(theme: Theme): Extension {
 
   // Syntax Highlighting
   const highlightStyle = HighlightStyle.define([
-    { tag: t.keyword, color: keyword },
-    { tag: [t.name, t.deleted, t.character, t.propertyName, t.macroName], color: variable },
-    { tag: [t.function(t.variableName), t.labelName], color: definition },
-    { tag: [t.color, t.constant(t.name), t.standard(t.name)], color: atom },
+    { tag: t.keyword, color: colors.base0e },
+    { tag: [t.name, t.deleted, t.character, t.propertyName, t.macroName], color: colors.base08 },
+    { tag: [t.function(t.variableName), t.labelName], color: colors.base0d },
+    { tag: [t.color, t.constant(t.name), t.standard(t.name)], color: colors.base09 },
     { tag: [t.definition(t.name), t.separator], color: colors.base05 },
     { tag: [t.typeName, t.className, t.number, t.changed, t.annotation, t.modifier, t.self, t.namespace], color: colors.base0a }, // Classes -> base0A. Number -> base09? Base16 says base09 is Integers.
     { tag: [t.operator, t.operatorKeyword, t.url, t.escape, t.regexp, t.link, t.special(t.string)], color: colors.base0c },
-    { tag: [t.meta, t.comment], color: comment },
+    { tag: [t.meta, t.comment], color: colors.base03 },
     { tag: t.strong, fontWeight: "bold" },
     { tag: t.emphasis, fontStyle: "italic" },
     { tag: t.strikethrough, textDecoration: "line-through" },
     { tag: t.link, color: colors.base09, textDecoration: "underline" },
     { tag: t.heading, fontWeight: "bold", color: colors.base0d },
-    { tag: [t.atom, t.bool, t.special(t.variableName)], color: atom },
-    { tag: [t.processingInstruction, t.string, t.inserted], color: string },
-    { tag: t.invalid, color: invalid },
+    { tag: [t.atom, t.bool, t.special(t.variableName)], color: colors.base09 },
+    { tag: [t.processingInstruction, t.string, t.inserted], color: colors.base0b },
+    { tag: t.invalid, color: colors.base0f },
     // Refinements
     { tag: t.number, color: colors.base09 },
     { tag: t.string, color: colors.base0b },
