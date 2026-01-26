@@ -3,6 +3,12 @@ import type { Maybe, Theme } from '$lib/Model';
 
 const _themeStore = writable<Maybe<Record<string, Theme>>>(null);
 
+/**
+ * Global store for managing loaded Base16 themes.
+ *
+ * Exposes a read-only subscription and a set method (though internal updates use the private `_themeStore`).
+ * The store value is a record mapping theme slugs to `Theme` objects, or `null` if not initialized.
+ */
 const themeStore = {
 	subscribe: _themeStore.subscribe,
 	set: _themeStore.set
@@ -10,6 +16,15 @@ const themeStore = {
 
 let themeCounter = 0;
 
+/**
+ * Normalizes and validates a color string to ensure it is a safe hex code.
+ *
+ * This function mitigates CSS injection risks by strictly allowing only valid hex characters
+ * and standard hex lengths (3, 4, 6, 8).
+ *
+ * @param color - The input color string (e.g., "#fff", "123456").
+ * @returns The normalized hex string with a leading "#", or an empty string if invalid.
+ */
 function normalizeColor(color: string | undefined): string {
 	if (!color) return '';
 	const hex = color.startsWith('#') ? color.substring(1) : color;
@@ -23,6 +38,14 @@ function normalizeColor(color: string | undefined): string {
 	return `#${hex}`;
 }
 
+/**
+ * Filters an object to only include keys that match the Base16 color pattern (base00-base0f).
+ *
+ * Keys are normalized to lowercase.
+ *
+ * @param obj - The input object containing potential color definitions.
+ * @returns A new object containing only valid color keys.
+ */
 function normalizeColorKeys(obj: any): any {
 	// Convert all keys to lowercase, but only process color keys (base00-0f)
 	const normalized: any = {};
@@ -37,6 +60,12 @@ function normalizeColorKeys(obj: any): any {
 
 const FORBIDDEN_KEYS = ['__proto__', 'constructor', 'prototype'];
 
+/**
+ * Sanitizes object keys to prevent prototype pollution attacks.
+ *
+ * @param key - The object key to check.
+ * @returns The original key, or a prefixed version (e.g., "safe-__proto__") if it is forbidden.
+ */
 function sanitize(key: string): string {
 	if (FORBIDDEN_KEYS.includes(key)) {
 		// Prepend "safe-" to dangerous keys to neutralize them.
@@ -80,6 +109,11 @@ function handleOneStructure(obj: any, filename?: string) {
 	});
 }
 
+/**
+ * Loads the default set of themes from the static asset `/nix-colors.json`.
+ *
+ * This function is typically called on app initialization to populate the store.
+ */
 export async function loadDefaultThemes() {
 	const assetAPI = await fetch('/nix-colors.json');
 	const assetAPIJSON = await assetAPI.json();
@@ -88,6 +122,15 @@ export async function loadDefaultThemes() {
 	}
 }
 
+/**
+ * Parses a single YAML value into a primitive type (string, number, boolean).
+ *
+ * This custom parser avoids the risks of `JSON.parse` or full YAML parsers when handling
+ * untrusted input, ensuring only simple primitives are returned.
+ *
+ * @param value - The raw string value from the YAML line.
+ * @returns The parsed value as a boolean, number, or string.
+ */
 function parseYamlValue(value: string): string | number | boolean {
 	// Safely parse a YAML value without using JSON.parse to prevent prototype pollution.
 	const trimmedValue = value.trim();
@@ -113,6 +156,15 @@ function parseYamlValue(value: string): string | number | boolean {
 	return trimmedValue;
 }
 
+/**
+ * A hardened, simple YAML parser that only supports flat key-value pairs.
+ *
+ * Designed to prevent Denial of Service (DoS) and prototype pollution by avoiding
+ * complex recursion and dangerous object construction patterns found in full YAML parsers.
+ *
+ * @param yaml - The raw YAML string.
+ * @returns A dictionary of parsed key-value pairs.
+ */
 function parseSimpleYaml(yaml: string): Record<string, any> {
 	// Parse simple YAML (one level depth)
 	return yaml.split('\n').reduce((structure: Record<string, any>, line: string) => {
@@ -139,6 +191,15 @@ function parseSimpleYaml(yaml: string): Record<string, any> {
 	}, {});
 }
 
+/**
+ * Processes a user-uploaded file to extract theme data.
+ *
+ * Supports both JSON and simple YAML formats. Includes security checks:
+ * - **DoS Protection:** Warns the user if the file exceeds 1MB.
+ * - **Validation:** Attempts to identify Base16 theme structures.
+ *
+ * @param file - The file object from a drag-and-drop or file input event.
+ */
 async function processFile(file: File) {
 	const MAX_FILE_SIZE = 1024 * 1024; // 1MB
 	if (file.size > MAX_FILE_SIZE) {

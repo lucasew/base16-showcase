@@ -4,6 +4,15 @@ import { HighlightStyle, syntaxHighlighting } from '@codemirror/language';
 import { tags as t } from '@lezer/highlight';
 import type { Theme } from '$lib/Model';
 
+/**
+ * Creates a CodeMirror theme extension based on a Base16 theme definition.
+ *
+ * This function maps the 16 colors of the Base16 specification to CodeMirror's
+ * syntax highlighting tags and editor UI elements (background, cursor, selection, etc.).
+ *
+ * @param theme - The Base16 theme object containing the color palette.
+ * @returns A CodeMirror Extension tuple containing the editor theme and syntax highlighting style.
+ */
 export function createBase16Theme(theme: Theme): Extension {
 	const { colors } = theme;
 
