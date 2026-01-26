@@ -1,1 +1,19 @@
-{"$schema": "https://inlang.com/schema/inlang-message-format", "hello_world": "Hallo Welt!", "app_title": "Base 16 Showcase", "language": "Sprache", "supported_formats": "Unterstützte Formate: .yaml, .json, .tmTheme, .enc (Base16).", "drag_drop_instruction": "Ziehen Sie mehrere Dateien per Drag & Drop, um eine kombinierte Sammlung von Schemata zu erstellen.", "local_processing": "Sie werden lokal in Ihrem Browser verarbeitet.", "load_default_colors": "Standardfarben laden", "preview": "Vorschau", "by": "von", "back_to_themes": "← Zurück zu den Themen", "theme_not_found": "Thema nicht gefunden", "theme_not_found_description": "Das Thema \"{id}\" konnte nicht gefunden werden.", "return_to_home": "Zurück zur Startseite", "loading_themes": "Lade Themen...", "javascript": "JavaScript", "rust": "Rust"}
+{
+	"$schema": "https://inlang.com/schema/inlang-message-format",
+	"hello_world": "Hallo Welt!",
+	"app_title": "Base 16 Showcase",
+	"language": "Sprache",
+	"supported_formats": "Unterstützte Formate: .yaml, .json, .tmTheme, .enc (Base16).",
+	"drag_drop_instruction": "Ziehen Sie mehrere Dateien per Drag & Drop, um eine kombinierte Sammlung von Schemata zu erstellen.",
+	"local_processing": "Sie werden lokal in Ihrem Browser verarbeitet.",
+	"load_default_colors": "Standardfarben laden",
+	"preview": "Vorschau",
+	"by": "von",
+	"back_to_themes": "← Zurück zu den Themen",
+	"theme_not_found": "Thema nicht gefunden",
+	"theme_not_found_description": "Das Thema \"{id}\" konnte nicht gefunden werden.",
+	"return_to_home": "Zurück zur Startseite",
+	"loading_themes": "Lade Themen...",
+	"javascript": "JavaScript",
+	"rust": "Rust"
+}
