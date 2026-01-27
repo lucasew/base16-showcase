@@ -237,7 +237,7 @@ async function processFile(file: File) {
 			});
 		}
 		return;
-  } catch {
+	} catch {
 		// JSON parsing failed, try YAML
 	}
 

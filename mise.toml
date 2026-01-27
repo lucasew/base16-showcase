@@ -2,12 +2,23 @@
 bun = "1.3.6"
 
 [tasks]
-install = "bun install"
-codegen = "npm run paraglide:compile"
+"install:deps" = "bun install"
+install = { depends = ["install:*"] }
+
+"codegen:paraglide" = "npm run paraglide:compile"
+codegen = { depends = ["codegen:*"] }
+
 "lint:eslint" = "eslint ."
 "lint:prettier" = "prettier --check ."
 "lint:check" = "bun run check"
-lint = { depends = ["lint:eslint", "lint:prettier", "lint:check"] }
+lint = { depends = ["lint:*"] }
+
+"fmt:prettier" = "prettier --write ."
+fmt = { depends = ["fmt:*"] }
+
+"test:unit" = "echo 'No tests found'"
+"test:build" = "bun run build"
+test = { depends = ["test:*"] }
+
 build = "bun run build"
-test = "echo 'No tests found'"
-ci = { depends = ["lint", "build"] }
+ci = { depends = ["lint", "test"] }
