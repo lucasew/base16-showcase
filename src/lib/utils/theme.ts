@@ -28,13 +28,17 @@ export function normalizeColor(color: string | undefined): string {
  * @param obj - The input object containing potential color definitions.
  * @returns A new object containing only valid color keys.
  */
-export function normalizeColorKeys(obj: any): any {
+export function normalizeColorKeys(obj: Record<string, unknown>): Record<string, unknown> {
 	// Convert all keys to lowercase, but only process color keys (base00-0f)
-	const normalized: any = {};
+	const normalized: Record<string, unknown> = {};
 	for (const key in obj) {
-		// Only include keys that look like base colors
-		if (key.toLowerCase().match(/^base0[0-9a-f]$/)) {
-			normalized[key.toLowerCase()] = obj[key];
+		// Only iterate over own properties to avoid prototype chain issues.
+		if (Object.prototype.hasOwnProperty.call(obj, key)) {
+			const lowerKey = key.toLowerCase();
+			// Only include keys that look like base colors
+			if (lowerKey.match(/^base0[0-9a-f]$/)) {
+				normalized[lowerKey] = obj[key];
+			}
 		}
 	}
 	return normalized;
