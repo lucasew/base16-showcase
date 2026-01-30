@@ -1,4 +1,4 @@
-const FORBIDDEN_KEYS = ['__proto__', 'constructor', 'prototype'];
+const FORBIDDEN_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
 
 /**
  * Sanitizes object keys to prevent prototype pollution attacks.
