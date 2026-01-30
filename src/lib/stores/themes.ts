@@ -1,5 +1,8 @@
 import { writable } from 'svelte/store';
 import type { Maybe, Theme } from '$lib/Model';
+import { normalizeColor, normalizeColorKeys } from '$lib/utils/theme';
+import { sanitize } from '$lib/utils/security';
+import { parseSimpleYaml } from '$lib/utils/yaml';
 
 const _themeStore = writable<Maybe<Record<string, Theme>>>(null);
 
@@ -15,64 +18,6 @@ const themeStore = {
 };
 
 let themeCounter = 0;
-
-/**
- * Normalizes and validates a color string to ensure it is a safe hex code.
- *
- * This function mitigates CSS injection risks by strictly allowing only valid hex characters
- * and standard hex lengths (3, 4, 6, 8).
- *
- * @param color - The input color string (e.g., "#fff", "123456").
- * @returns The normalized hex string with a leading "#", or an empty string if invalid.
- */
-function normalizeColor(color: string | undefined): string {
-	if (!color) return '';
-	const hex = color.startsWith('#') ? color.substring(1) : color;
-
-	// Validate that the color is a valid hex code to prevent CSS injection.
-	// It must only contain hex characters and have a valid length (3, 4, 6, or 8).
-	if (!/^[0-9a-fA-F]+$/.test(hex) || ![3, 4, 6, 8].includes(hex.length)) {
-		return ''; // Return a safe, empty string if invalid.
-	}
-
-	return `#${hex}`;
-}
-
-/**
- * Filters an object to only include keys that match the Base16 color pattern (base00-base0f).
- *
- * Keys are normalized to lowercase.
- *
- * @param obj - The input object containing potential color definitions.
- * @returns A new object containing only valid color keys.
- */
-function normalizeColorKeys(obj: any): any {
-	// Convert all keys to lowercase, but only process color keys (base00-0f)
-	const normalized: any = {};
-	for (const key in obj) {
-		// Only include keys that look like base colors
-		if (key.toLowerCase().match(/^base0[0-9a-f]$/)) {
-			normalized[key.toLowerCase()] = obj[key];
-		}
-	}
-	return normalized;
-}
-
-const FORBIDDEN_KEYS = ['__proto__', 'constructor', 'prototype'];
-
-/**
- * Sanitizes object keys to prevent prototype pollution attacks.
- *
- * @param key - The object key to check.
- * @returns The original key, or a prefixed version (e.g., "safe-__proto__") if it is forbidden.
- */
-function sanitize(key: string): string {
-	if (FORBIDDEN_KEYS.includes(key)) {
-		// Prepend "safe-" to dangerous keys to neutralize them.
-		return `safe-${key}`;
-	}
-	return key;
-}
 
 function handleOneStructure(obj: any, filename?: string) {
 	let slug = sanitize(obj.scheme || obj.slug);
@@ -123,75 +68,6 @@ export async function loadDefaultThemes() {
 }
 
 /**
- * Parses a single YAML value into a primitive type (string, number, boolean).
- *
- * This custom parser avoids the risks of `JSON.parse` or full YAML parsers when handling
- * untrusted input, ensuring only simple primitives are returned.
- *
- * @param value - The raw string value from the YAML line.
- * @returns The parsed value as a boolean, number, or string.
- */
-function parseYamlValue(value: string): string | number | boolean {
-	// Safely parse a YAML value without using JSON.parse to prevent prototype pollution.
-	const trimmedValue = value.trim();
-
-	// Boolean check
-	if (trimmedValue === 'true') return true;
-	if (trimmedValue === 'false') return false;
-
-	// Number check (integer or float)
-	const num = Number(trimmedValue);
-	if (!isNaN(num) && isFinite(num) && trimmedValue !== '') {
-		return num;
-	}
-
-	// String fallback (remove quotes if present)
-	if (
-		(trimmedValue.startsWith('"') && trimmedValue.endsWith('"')) ||
-		(trimmedValue.startsWith("'") && trimmedValue.endsWith("'"))
-	) {
-		return trimmedValue.slice(1, -1);
-	}
-
-	return trimmedValue;
-}
-
-/**
- * A hardened, simple YAML parser that only supports flat key-value pairs.
- *
- * Designed to prevent Denial of Service (DoS) and prototype pollution by avoiding
- * complex recursion and dangerous object construction patterns found in full YAML parsers.
- *
- * @param yaml - The raw YAML string.
- * @returns A dictionary of parsed key-value pairs.
- */
-function parseSimpleYaml(yaml: string): Record<string, any> {
-	// Parse simple YAML (one level depth)
-	return yaml.split('\n').reduce((structure: Record<string, any>, line: string) => {
-		const trimmedLine = line.trim();
-		if (trimmedLine.length === 0 || trimmedLine.startsWith('#')) {
-			return structure;
-		}
-
-		const colonIndex = trimmedLine.indexOf(':');
-		if (colonIndex === -1) {
-			return structure;
-		}
-
-		const rawKey = trimmedLine.substring(0, colonIndex).trim();
-		if (rawKey.length === 0) {
-			return structure;
-		}
-
-		const value = trimmedLine.substring(colonIndex + 1).trim();
-		const key = sanitize(rawKey);
-		structure[key] = parseYamlValue(value);
-
-		return structure;
-	}, {});
-}
-
-/**
  * Processes a user-uploaded file to extract theme data.
  *
  * Supports both JSON and simple YAML formats. Includes security checks:
@@ -237,7 +113,7 @@ async function processFile(file: File) {
 			});
 		}
 		return;
-  } catch {
+	} catch {
 		// JSON parsing failed, try YAML
 	}
 
