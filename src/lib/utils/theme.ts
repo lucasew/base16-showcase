@@ -1,0 +1,41 @@
+/**
+ * Normalizes and validates a color string to ensure it is a safe hex code.
+ *
+ * This function mitigates CSS injection risks by strictly allowing only valid hex characters
+ * and standard hex lengths (3, 4, 6, 8).
+ *
+ * @param color - The input color string (e.g., "#fff", "123456").
+ * @returns The normalized hex string with a leading "#", or an empty string if invalid.
+ */
+export function normalizeColor(color: string | undefined): string {
+	if (!color) return '';
+	const hex = color.startsWith('#') ? color.substring(1) : color;
+
+	// Validate that the color is a valid hex code to prevent CSS injection.
+	// It must only contain hex characters and have a valid length (3, 4, 6, or 8).
+	if (!/^[0-9a-fA-F]+$/.test(hex) || ![3, 4, 6, 8].includes(hex.length)) {
+		return ''; // Return a safe, empty string if invalid.
+	}
+
+	return `#${hex}`;
+}
+
+/**
+ * Filters an object to only include keys that match the Base16 color pattern (base00-base0f).
+ *
+ * Keys are normalized to lowercase.
+ *
+ * @param obj - The input object containing potential color definitions.
+ * @returns A new object containing only valid color keys.
+ */
+export function normalizeColorKeys(obj: any): any {
+	// Convert all keys to lowercase, but only process color keys (base00-0f)
+	const normalized: any = {};
+	for (const key in obj) {
+		// Only include keys that look like base colors
+		if (key.toLowerCase().match(/^base0[0-9a-f]$/)) {
+			normalized[key.toLowerCase()] = obj[key];
+		}
+	}
+	return normalized;
+}
