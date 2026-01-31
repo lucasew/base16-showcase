@@ -4,7 +4,7 @@
  * This function mitigates CSS injection risks by strictly allowing only valid hex characters
  * and standard hex lengths (3, 4, 6, 8).
  *
- * @param color - The input color string (e.g., "#fff", "123456").
+ * @param color - The input value (typically a string, e.g., "#fff", "123456").
  * @returns The normalized hex string with a leading "#", or an empty string if invalid.
  */
 export function normalizeColor(color: unknown): string {
