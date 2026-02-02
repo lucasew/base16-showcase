@@ -97,9 +97,7 @@ async function processFile(file: File) {
 		const json = JSON.parse(content);
 
 		// Check if it has color keys directly (single theme with colors at root)
-		const hasColorKeys = Object.keys(json).some((key) =>
-			BASE16_KEY_REGEX.test(key.toLowerCase())
-		);
+		const hasColorKeys = Object.keys(json).some((key) => BASE16_KEY_REGEX.test(key.toLowerCase()));
 
 		if (
 			hasColorKeys ||

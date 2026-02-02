@@ -1,4 +1,3 @@
-
 // Hex color validation regex: only hex chars, anchored start/end.
 const HEX_CHARS_REGEX = /^[0-9a-fA-F]+$/;
 
