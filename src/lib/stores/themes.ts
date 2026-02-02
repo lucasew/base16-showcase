@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 import type { Maybe, Theme } from '$lib/Model';
-import { normalizeColor, normalizeColorKeys } from '$lib/utils/theme';
+import { normalizeColor, normalizeColorKeys, BASE16_KEY_REGEX } from '$lib/utils/theme';
 import { sanitize } from '$lib/utils/security';
 import { parseSimpleYaml } from '$lib/utils/yaml';
 
@@ -19,6 +19,9 @@ const themeStore = {
 
 let themeCounter = 0;
 
+// Supported file extensions for themes
+const THEME_FILE_EXTENSIONS_REGEX = /\.(json|yaml|yml)$/i;
+
 function handleOneStructure(obj: any, filename?: string) {
 	let slug = sanitize(obj.scheme || obj.slug);
 
@@ -26,7 +29,7 @@ function handleOneStructure(obj: any, filename?: string) {
 	if (!slug) {
 		if (filename) {
 			// Use filename without extension
-			slug = filename.replace(/\.(json|yaml|yml)$/i, '');
+			slug = filename.replace(THEME_FILE_EXTENSIONS_REGEX, '');
 		} else {
 			// Fallback to counter
 			themeCounter++;
@@ -95,7 +98,7 @@ async function processFile(file: File) {
 
 		// Check if it has color keys directly (single theme with colors at root)
 		const hasColorKeys = Object.keys(json).some((key) =>
-			key.toLowerCase().match(/^base0[0-9a-f]$/)
+			BASE16_KEY_REGEX.test(key.toLowerCase())
 		);
 
 		if (

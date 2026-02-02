@@ -1,3 +1,10 @@
+
+// Hex color validation regex: only hex chars, anchored start/end.
+const HEX_CHARS_REGEX = /^[0-9a-fA-F]+$/;
+
+// Base16 key pattern regex: base00 to base0f.
+export const BASE16_KEY_REGEX = /^base0[0-9a-f]$/;
+
 /**
  * Normalizes and validates a color string to ensure it is a safe hex code.
  *
@@ -14,7 +21,7 @@ export function normalizeColor(color: any): string {
 
 	// Validate that the color is a valid hex code to prevent CSS injection.
 	// It must only contain hex characters and have a valid length (3, 4, 6, or 8).
-	if (!/^[0-9a-fA-F]+$/.test(hex) || ![3, 4, 6, 8].includes(hex.length)) {
+	if (!HEX_CHARS_REGEX.test(hex) || ![3, 4, 6, 8].includes(hex.length)) {
 		return ''; // Return a safe, empty string if invalid.
 	}
 
@@ -37,7 +44,7 @@ export function normalizeColorKeys(obj: Record<string, unknown>): Record<string,
 		if (Object.prototype.hasOwnProperty.call(obj, key)) {
 			const lowerKey = key.toLowerCase();
 			// Only include keys that look like base colors
-			if (lowerKey.match(/^base0[0-9a-f]$/)) {
+			if (BASE16_KEY_REGEX.test(lowerKey)) {
 				normalized[lowerKey] = obj[key];
 			}
 		}
