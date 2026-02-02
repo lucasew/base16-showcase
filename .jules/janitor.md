@@ -10,4 +10,4 @@
 **Issue:** Regex literals for validating hex colors and Base16 keys were duplicated across `src/lib/utils/theme.ts` and `src/lib/stores/themes.ts`.
 **Root Cause:** Lack of shared constants for common validation patterns leads to code duplication and potential inconsistency.
 **Solution:** Extracted `HEX_CHARS_REGEX` and `BASE16_KEY_REGEX` into `src/lib/utils/theme.ts`, exported the latter, and updated consuming code to use these constants. Also extracted `THEME_FILE_EXTENSIONS_REGEX` in the store.
-**Pattern:** Extract repeated regex literals into top-level named constants. This avoids runtime recompilation, eliminates duplication, and acts as self-documentation.
+**Pattern:** Extract duplicated regex literals into top-level named constants. This avoids runtime recompilation, eliminates duplication, and acts as self-documentation.
