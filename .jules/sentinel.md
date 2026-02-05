@@ -23,3 +23,11 @@
 **Learning:** TypeScript types are erased at runtime. When handling user-provided data (like JSON files), explicit type coercion or validation is necessary to prevent runtime crashes, even if the types say otherwise. Updating function signatures to accept `unknown` can help enforce safe handling of untrusted input.
 
 **Prevention:** Explicitly coerce potential string inputs using `String()` or validate `typeof` before calling string methods when dealing with external data. Update TS signatures to reflect that input might be untrusted (`unknown`).
+
+## 2026-02-05 - Prototype Pollution via Theme Filename
+
+**Vulnerability:** The `handleOneStructure` function in `src/lib/stores/themes.ts` sanitized the `slug` derived from theme metadata but failed to sanitize the fallback `slug` derived from the filename. This allowed malicious filenames (e.g., `constructor.json`) to be used as object keys, potentially leading to prototype pollution or object property pollution in the global theme store.
+
+**Learning:** Sanitization must be applied to *all* control paths that determine the value of a key. Fallback logic (like using a filename when metadata is missing) is a common place where security checks are overlooked.
+
+**Prevention:** Apply sanitization logic at the final point of assignment or variable determination, ensuring that regardless of the source (metadata or fallback), the value is validated before use.

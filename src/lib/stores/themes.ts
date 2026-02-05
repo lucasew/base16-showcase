@@ -20,19 +20,20 @@ const themeStore = {
 let themeCounter = 0;
 
 function handleOneStructure(obj: any, filename?: string) {
-	let slug = sanitize(obj.scheme || obj.slug);
+	let rawSlug = obj.scheme || obj.slug;
 
 	// Generate automatic name if slug is missing
-	if (!slug) {
+	if (!rawSlug) {
 		if (filename) {
 			// Use filename without extension
-			slug = filename.replace(/\.(json|yaml|yml)$/i, '');
+			rawSlug = filename.replace(/\.(json|yaml|yml)$/i, '');
 		} else {
 			// Fallback to counter
 			themeCounter++;
-			slug = `theme-${themeCounter}`;
+			rawSlug = `theme-${themeCounter}`;
 		}
 	}
+	const slug = sanitize(String(rawSlug));
 	const { author } = obj;
 	const colors = normalizeColorKeys(obj.colors || obj);
 
