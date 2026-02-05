@@ -28,6 +28,6 @@
 
 **Vulnerability:** The `handleOneStructure` function in `src/lib/stores/themes.ts` sanitized the `slug` derived from theme metadata but failed to sanitize the fallback `slug` derived from the filename. This allowed malicious filenames (e.g., `constructor.json`) to be used as object keys, potentially leading to prototype pollution or object property pollution in the global theme store.
 
-**Learning:** Sanitization must be applied to *all* control paths that determine the value of a key. Fallback logic (like using a filename when metadata is missing) is a common place where security checks are overlooked.
+**Learning:** Sanitization must be applied to _all_ control paths that determine the value of a key. Fallback logic (like using a filename when metadata is missing) is a common place where security checks are overlooked.
 
 **Prevention:** Apply sanitization logic at the final point of assignment or variable determination, ensuring that regardless of the source (metadata or fallback), the value is validated before use.
