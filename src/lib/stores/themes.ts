@@ -20,7 +20,7 @@ const themeStore = {
 let themeCounter = 0;
 
 function handleOneStructure(obj: any, filename?: string) {
-	let rawSlug: unknown = obj.scheme || obj.slug;
+	let rawSlug = obj.scheme || obj.slug;
 
 	// Generate automatic name if slug is missing
 	if (!rawSlug) {
@@ -33,7 +33,6 @@ function handleOneStructure(obj: any, filename?: string) {
 			rawSlug = `theme-${themeCounter}`;
 		}
 	}
-	// Ensure the slug is a string and safe to use as a key
 	const slug = sanitize(String(rawSlug));
 	const { author } = obj;
 	const colors = normalizeColorKeys(obj.colors || obj);
