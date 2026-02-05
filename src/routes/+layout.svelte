@@ -4,6 +4,7 @@
 	import * as m from '$lib/paraglide/messages.js';
 	import { browser } from '$app/environment';
 	import { base } from '$app/paths';
+	import { initializeThemeListeners } from '$lib/services/themeLoader';
 
 	const { children } = $props();
 
@@ -23,6 +24,11 @@
 		const theme = isDark ? 'dark' : 'light';
 		document.documentElement.setAttribute('data-theme', theme);
 		localStorage.setItem('theme', theme);
+	});
+
+	$effect(() => {
+		if (!browser) return;
+		return initializeThemeListeners();
 	});
 </script>
 
