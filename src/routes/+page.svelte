@@ -1,5 +1,6 @@
 <script lang="ts">
-	import themeStore, { loadDefaultThemes } from '$lib/stores/themes';
+	import themeStore from '$lib/stores/themes';
+	import { loadDefaultThemes } from '$lib/services/themeLoader';
 	import Themes from '$lib/components/Themes.svelte';
 	import * as m from '$lib/paraglide/messages.js';
 </script>
