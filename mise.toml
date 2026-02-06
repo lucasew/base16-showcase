@@ -12,8 +12,4 @@ lint = { depends = ["lint:*"] }
 fmt = { depends = ["fmt:*"] }
 build = "bun run build"
 test = "echo 'No tests found'"
-ci = """
-mise run lint
-mise run test
-mise run build
-"""
+ci = "mise run lint && mise run test && mise run build"
