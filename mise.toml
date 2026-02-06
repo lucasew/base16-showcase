@@ -4,11 +4,11 @@ bun = "1.3.8"
 [tasks]
 install = "bun install"
 codegen = "bun run paraglide:compile"
-"lint:eslint" = "bun x eslint ."
-"lint:prettier" = "bun x prettier --check ."
+"lint:eslint" = "bun run lint:eslint"
+"lint:prettier" = "bun run lint:prettier"
 "lint:check" = "bun run check"
 lint = { depends = ["lint:*"] }
-"fmt:prettier" = "bun x prettier --write ."
+"fmt:prettier" = "bun run fmt:prettier"
 fmt = { depends = ["fmt:*"] }
 build = "bun run build"
 test = "echo 'No tests found'"
