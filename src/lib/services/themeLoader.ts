@@ -3,6 +3,7 @@ import type { Theme } from '$lib/Model';
 import { normalizeColor, normalizeColorKeys } from '$lib/utils/theme';
 import { sanitize } from '$lib/utils/security';
 import { parseSimpleYaml } from '$lib/utils/yaml';
+import { reportError } from '$lib/utils/error';
 
 let themeCounter = 0;
 
@@ -104,7 +105,7 @@ async function processFile(file: File) {
 		const structure = parseSimpleYaml(content);
 		handleOneStructure(structure, filename);
 	} catch (yamlError) {
-		console.error(`Failed to parse file ${filename}:`, yamlError);
+		reportError(`Failed to parse file ${filename}:`, yamlError);
 	}
 }
 
