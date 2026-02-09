@@ -23,3 +23,5 @@
 **Learning:** TypeScript types are erased at runtime. When handling user-provided data (like JSON files), explicit type coercion or validation is necessary to prevent runtime crashes, even if the types say otherwise. Updating function signatures to accept `unknown` can help enforce safe handling of untrusted input.
 
 **Prevention:** Explicitly coerce potential string inputs using `String()` or validate `typeof` before calling string methods when dealing with external data. Update TS signatures to reflect that input might be untrusted (`unknown`).
+
+- 2026-01-27: [Ignored Errors] Swallowing errors or using console.error directly hides failures; always use a centralized reportError function.
