@@ -13,14 +13,11 @@ let themeCounter = 0;
 /**
  * Processes a single theme structure and adds it to the global store.
  *
- * This function handles:
- * - Slug generation: Uses `scheme`/`slug`, falls back to filename, or an auto-incrementing counter.
- * - Sanitization: Ensures the slug is safe to use.
- * - Color Normalization: Validates and normalizes color values to safe hex codes.
- * - State Update: Updates `themeStore` with the new theme.
+ * This function handles slug generation (using scheme/slug, filename fallback, or counter),
+ * sanitization, color normalization, and updating the themeStore.
  *
- * @param obj - The raw theme object. Expected to contain `scheme` (or `slug`), `author`, and `colors`.
- * @param filename - Optional. The original filename, used as a fallback for slug generation if the theme lacks a name.
+ * @param obj - The raw theme object. Expected to contain scheme/slug, author, and colors.
+ * @param filename - Optional. The original filename, used as a fallback for slug generation.
  */
 function handleOneStructure(obj: any, filename?: string) {
 	let slug = sanitize(obj.scheme || obj.slug);
@@ -53,10 +50,10 @@ function handleOneStructure(obj: any, filename?: string) {
 }
 
 /**
- * Loads the default set of themes from the static asset `/nix-colors.json`.
+ * Loads the default set of themes from the static asset /nix-colors.json.
  *
  * This function is typically called on app initialization to populate the store.
- * It iterates over the collection and processes each theme using `handleOneStructure`.
+ * It iterates over the collection and processes each theme.
  */
 export async function loadDefaultThemes() {
 	const assetAPI = await fetch('/nix-colors.json');
@@ -69,14 +66,11 @@ export async function loadDefaultThemes() {
 /**
  * Processes a user-uploaded file to extract theme data.
  *
- * Supports both JSON and simple YAML formats. Includes security checks:
- * - **DoS Protection:** Warns the user if the file exceeds 1MB.
- * - **Validation:** Attempts to identify Base16 theme structures.
+ * Supports both JSON and simple YAML formats.
+ * Includes security checks like file size validation (DoS protection).
  *
- * Flow:
- * 1. Checks file size.
- * 2. Tries to parse as JSON. Detects if it's a single theme or a collection.
- * 3. If JSON fails, tries to parse as simple YAML.
+ * The function first checks the file size. Then it tries to parse as JSON (single or collection).
+ * If JSON parsing fails, it attempts to parse as simple YAML.
  *
  * @param file - The file object from a drag-and-drop or file input event.
  */
@@ -145,13 +139,8 @@ function handleFilesInput(_files: FileList | null) {
 /**
  * Initializes global event listeners for file handling.
  *
- * Supported interactions:
- * - **Drag & Drop:** Allows users to drop theme files anywhere on the page.
- * - **Double Click:** Triggers a hidden file input (id `data-input`) to open the file picker.
- *
- * Returns a cleanup function to remove the listeners, useful for component lifecycle management.
- *
- * @returns A cleanup function that removes the event listeners.
+ * Supported interactions: Drag & Drop, and Double Click (triggers hidden input).
+ * Returns a cleanup function to remove the listeners.
  */
 export function initializeThemeListeners() {
 	if (typeof document === 'undefined') return () => {};
