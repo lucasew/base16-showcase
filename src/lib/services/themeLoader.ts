@@ -7,6 +7,11 @@ import { reportError } from '$lib/utils/error';
 
 let themeCounter = 0;
 
+/**
+ * Processes a single theme structure and adds it to the global store.
+ * @param obj - The raw theme object.
+ * @param filename - Optional. The original filename.
+ */
 function handleOneStructure(obj: any, filename?: string) {
 	let slug = sanitize(obj.scheme || obj.slug);
 
@@ -38,9 +43,7 @@ function handleOneStructure(obj: any, filename?: string) {
 }
 
 /**
- * Loads the default set of themes from the static asset `/nix-colors.json`.
- *
- * This function is typically called on app initialization to populate the store.
+ * Loads the default set of themes from the static asset /nix-colors.json.
  */
 export async function loadDefaultThemes() {
 	try {
@@ -57,15 +60,6 @@ export async function loadDefaultThemes() {
 	}
 }
 
-/**
- * Processes a user-uploaded file to extract theme data.
- *
- * Supports both JSON and simple YAML formats. Includes security checks:
- * - **DoS Protection:** Warns the user if the file exceeds 1MB.
- * - **Validation:** Attempts to identify Base16 theme structures.
- *
- * @param file - The file object from a drag-and-drop or file input event.
- */
 async function processFile(file: File) {
 	const MAX_FILE_SIZE = 1024 * 1024; // 1MB
 	if (file.size > MAX_FILE_SIZE) {
@@ -130,8 +124,7 @@ function handleFilesInput(_files: FileList | null) {
 }
 
 /**
- * Initializes global event listeners for file handling (Drag & Drop, Double Click).
- * Returns a cleanup function to remove the listeners.
+ * Initializes global event listeners for file handling.
  */
 export function initializeThemeListeners() {
 	if (typeof document === 'undefined') return () => {};
