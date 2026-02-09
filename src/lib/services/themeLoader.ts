@@ -3,6 +3,7 @@ import type { Theme } from '$lib/Model';
 import { normalizeColor, normalizeColorKeys } from '$lib/utils/theme';
 import { sanitize } from '$lib/utils/security';
 import { parseSimpleYaml } from '$lib/utils/yaml';
+import { reportError } from '$lib/utils/error';
 
 let themeCounter = 0;
 
@@ -42,10 +43,17 @@ function handleOneStructure(obj: any, filename?: string) {
  * This function is typically called on app initialization to populate the store.
  */
 export async function loadDefaultThemes() {
-	const assetAPI = await fetch('/nix-colors.json');
-	const assetAPIJSON = await assetAPI.json();
-	for (const theme of Object.values(assetAPIJSON)) {
-		handleOneStructure(theme as any);
+	try {
+		const assetAPI = await fetch('/nix-colors.json');
+		if (!assetAPI.ok) {
+			throw new Error(`Failed to fetch default themes: ${assetAPI.statusText}`);
+		}
+		const assetAPIJSON = await assetAPI.json();
+		for (const theme of Object.values(assetAPIJSON)) {
+			handleOneStructure(theme as any);
+		}
+	} catch (error) {
+		reportError(error, { phase: 'loadDefaultThemes' });
 	}
 }
 
@@ -68,7 +76,14 @@ async function processFile(file: File) {
 			return; // Stop if the user cancels
 		}
 	}
-	const content = await file.text();
+
+	let content: string;
+	try {
+		content = await file.text();
+	} catch (error) {
+		reportError(error, { filename: file.name, phase: 'read_file' });
+		return;
+	}
 	const filename = file.name;
 
 	// Try JSON first (regardless of file extension)
@@ -104,7 +119,7 @@ async function processFile(file: File) {
 		const structure = parseSimpleYaml(content);
 		handleOneStructure(structure, filename);
 	} catch (yamlError) {
-		console.error(`Failed to parse file ${filename}:`, yamlError);
+		reportError(yamlError, { filename, phase: 'yaml_parse' });
 	}
 }
 
