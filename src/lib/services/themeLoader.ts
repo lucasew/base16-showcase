@@ -4,20 +4,12 @@ import { normalizeColor, normalizeColorKeys } from '$lib/utils/theme';
 import { sanitize } from '$lib/utils/security';
 import { parseSimpleYaml } from '$lib/utils/yaml';
 
-/**
- * Counter for generating unique slugs for themes with missing names.
- * This is a module-level side effect.
- */
 let themeCounter = 0;
 
 /**
  * Processes a single theme structure and adds it to the global store.
- *
- * This function handles slug generation (using scheme/slug, filename fallback, or counter),
- * sanitization, color normalization, and updating the themeStore.
- *
- * @param obj - The raw theme object. Expected to contain scheme/slug, author, and colors.
- * @param filename - Optional. The original filename, used as a fallback for slug generation.
+ * @param obj - The raw theme object.
+ * @param filename - Optional. The original filename.
  */
 function handleOneStructure(obj: any, filename?: string) {
 	let slug = sanitize(obj.scheme || obj.slug);
@@ -51,9 +43,6 @@ function handleOneStructure(obj: any, filename?: string) {
 
 /**
  * Loads the default set of themes from the static asset /nix-colors.json.
- *
- * This function is typically called on app initialization to populate the store.
- * It iterates over the collection and processes each theme.
  */
 export async function loadDefaultThemes() {
 	const assetAPI = await fetch('/nix-colors.json');
@@ -63,17 +52,6 @@ export async function loadDefaultThemes() {
 	}
 }
 
-/**
- * Processes a user-uploaded file to extract theme data.
- *
- * Supports both JSON and simple YAML formats.
- * Includes security checks like file size validation (DoS protection).
- *
- * The function first checks the file size. Then it tries to parse as JSON (single or collection).
- * If JSON parsing fails, it attempts to parse as simple YAML.
- *
- * @param file - The file object from a drag-and-drop or file input event.
- */
 async function processFile(file: File) {
 	const MAX_FILE_SIZE = 1024 * 1024; // 1MB
 	if (file.size > MAX_FILE_SIZE) {
@@ -124,12 +102,6 @@ async function processFile(file: File) {
 	}
 }
 
-/**
- * Handles a list of files (e.g., from a file input or drag event).
- *
- * @param _files - The FileList object (can be null).
- * @returns A promise that resolves when all files have been processed.
- */
 function handleFilesInput(_files: FileList | null) {
 	if (!_files) return;
 	const files = Array.from(_files);
@@ -138,9 +110,6 @@ function handleFilesInput(_files: FileList | null) {
 
 /**
  * Initializes global event listeners for file handling.
- *
- * Supported interactions: Drag & Drop, and Double Click (triggers hidden input).
- * Returns a cleanup function to remove the listeners.
  */
 export function initializeThemeListeners() {
 	if (typeof document === 'undefined') return () => {};
