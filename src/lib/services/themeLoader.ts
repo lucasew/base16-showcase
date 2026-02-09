@@ -4,8 +4,24 @@ import { normalizeColor, normalizeColorKeys } from '$lib/utils/theme';
 import { sanitize } from '$lib/utils/security';
 import { parseSimpleYaml } from '$lib/utils/yaml';
 
+/**
+ * Counter for generating unique slugs for themes with missing names.
+ * This is a module-level side effect.
+ */
 let themeCounter = 0;
 
+/**
+ * Processes a single theme structure and adds it to the global store.
+ *
+ * This function handles:
+ * - Slug generation: Uses `scheme`/`slug`, falls back to filename, or an auto-incrementing counter.
+ * - Sanitization: Ensures the slug is safe to use.
+ * - Color Normalization: Validates and normalizes color values to safe hex codes.
+ * - State Update: Updates `themeStore` with the new theme.
+ *
+ * @param obj - The raw theme object. Expected to contain `scheme` (or `slug`), `author`, and `colors`.
+ * @param filename - Optional. The original filename, used as a fallback for slug generation if the theme lacks a name.
+ */
 function handleOneStructure(obj: any, filename?: string) {
 	let slug = sanitize(obj.scheme || obj.slug);
 
@@ -40,6 +56,7 @@ function handleOneStructure(obj: any, filename?: string) {
  * Loads the default set of themes from the static asset `/nix-colors.json`.
  *
  * This function is typically called on app initialization to populate the store.
+ * It iterates over the collection and processes each theme using `handleOneStructure`.
  */
 export async function loadDefaultThemes() {
 	const assetAPI = await fetch('/nix-colors.json');
@@ -55,6 +72,12 @@ export async function loadDefaultThemes() {
  * Supports both JSON and simple YAML formats. Includes security checks:
  * - **DoS Protection:** Warns the user if the file exceeds 1MB.
  * - **Validation:** Attempts to identify Base16 theme structures.
+ *
+ * Flow:
+ * 1. Checks file size.
+ * 2. Tries to parse as JSON.
+ *    - Detects if it's a single theme (has `slug`/`colors`/`base0X`) or a collection.
+ * 3. If JSON fails, tries to parse as simple YAML.
  *
  * @param file - The file object from a drag-and-drop or file input event.
  */
@@ -108,6 +131,12 @@ async function processFile(file: File) {
 	}
 }
 
+/**
+ * Handles a list of files (e.g., from a file input or drag event).
+ *
+ * @param _files - The FileList object (can be null).
+ * @returns A promise that resolves when all files have been processed.
+ */
 function handleFilesInput(_files: FileList | null) {
 	if (!_files) return;
 	const files = Array.from(_files);
@@ -115,8 +144,15 @@ function handleFilesInput(_files: FileList | null) {
 }
 
 /**
- * Initializes global event listeners for file handling (Drag & Drop, Double Click).
- * Returns a cleanup function to remove the listeners.
+ * Initializes global event listeners for file handling.
+ *
+ * Supported interactions:
+ * - **Drag & Drop:** Allows users to drop theme files anywhere on the page.
+ * - **Double Click:** Triggers a hidden file input (id `data-input`) to open the file picker.
+ *
+ * Returns a cleanup function to remove the listeners, useful for component lifecycle management.
+ *
+ * @returns A cleanup function that removes the event listeners.
  */
 export function initializeThemeListeners() {
 	if (typeof document === 'undefined') return () => {};
