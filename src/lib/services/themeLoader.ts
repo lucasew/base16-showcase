@@ -75,8 +75,7 @@ export async function loadDefaultThemes() {
  *
  * Flow:
  * 1. Checks file size.
- * 2. Tries to parse as JSON.
- *    - Detects if it's a single theme (has `slug`/`colors`/`base0X`) or a collection.
+ * 2. Tries to parse as JSON. Detects if it's a single theme or a collection.
  * 3. If JSON fails, tries to parse as simple YAML.
  *
  * @param file - The file object from a drag-and-drop or file input event.
