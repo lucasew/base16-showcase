@@ -22,7 +22,6 @@ This file lists patterns of changes that have been consistently rejected by huma
 **- Justification:** These aliases provide semantic meaning and context (mapping Base16 colors to syntax tokens) which is valuable for maintainability and documentation of the mapping logic.
 **- Files Affected:** `src/lib/codemirrorTheme.ts`
 
-
 ## IGNORE: Mise Task Chaining
 
 **- Pattern:** Defining `mise` tasks using shell chaining (e.g., `cmd1 && cmd2`) for complex workflows like CI.
