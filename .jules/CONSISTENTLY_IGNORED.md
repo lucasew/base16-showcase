@@ -22,11 +22,6 @@ This file lists patterns of changes that have been consistently rejected by huma
 **- Justification:** These aliases provide semantic meaning and context (mapping Base16 colors to syntax tokens) which is valuable for maintainability and documentation of the mapping logic.
 **- Files Affected:** `src/lib/codemirrorTheme.ts`
 
-## IGNORE: Extracting Regex Constants
-
-**- Pattern:** Extracting regex literals to top-level constants when they are used in limited scope (1-2 times) inside stores or services.
-**- Justification:** Unless the regex is complex or reused widely, extracting it increases cognitive load by separating definition from usage and has been rejected as unnecessary optimization.
-**- Files Affected:** `src/lib/stores/*.ts`, `src/lib/services/*.ts`
 
 ## IGNORE: Mise Task Chaining
 
