@@ -1,4 +1,4 @@
-import { sequence } from '@sveltejs/kit/hooks';
+import {sequence} from '@sveltejs/kit/hooks';
 import * as Sentry from '@sentry/sveltekit';
 // src/hooks.server.js
 import { paraglideMiddleware } from '$lib/paraglide/server.js';
@@ -10,6 +10,5 @@ export const handle = sequence(Sentry.sentryHandle(), ({ event, resolve }) =>
 		return resolve(event, {
 			transformPageChunk: ({ html }) => html.replace('%paraglide.lang%', locale)
 		});
-	})
-);
+	}));
 export const handleError = Sentry.handleErrorWithSentry();
