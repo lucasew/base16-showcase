@@ -7,7 +7,7 @@ codegen = "npm run paraglide:compile"
 "lint:eslint" = "eslint ."
 "lint:prettier" = "prettier --check ."
 "lint:check" = "bun run check"
-lint = { depends = ["lint:eslint", "lint:prettier", "lint:check"] }
+lint = { depends = ["lint:*"] }
 "fmt:prettier" = "bun run fmt:prettier"
 fmt = { depends = ["fmt:*"] }
 build = "bun run build"
