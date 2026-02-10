@@ -8,6 +8,8 @@ codegen = "npm run paraglide:compile"
 "lint:prettier" = "prettier --check ."
 "lint:check" = "bun run check"
 lint = { depends = ["lint:eslint", "lint:prettier", "lint:check"] }
+"fmt:prettier" = "bun run fmt:prettier"
+fmt = { depends = ["fmt:*"] }
 build = "bun run build"
 test = "echo 'No tests found'"
 ci = { depends = ["lint", "build"] }
