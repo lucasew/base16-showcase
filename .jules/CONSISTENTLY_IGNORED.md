@@ -34,4 +34,28 @@ This file lists patterns of changes that have been consistently rejected by huma
 **- Justification:** The project prefers using `mise`'s dependency system (`depends = [...]`) for task orchestration to ensure parallel execution where possible and cleaner definitions.
 **- Files Affected:** `mise.toml`
 
+## IGNORE: Automated Codegen PR Workflow
+
+**- Pattern:** Creating a GitHub Actions workflow (e.g., `autorelease.yml`) that runs codegen tasks and automatically creates a Pull Request for changes.
+**- Justification:** Multiple attempts (PR #76, #70, #68) to implement this automation have been rejected. The complexity and potential for noise (churning PRs) are unwanted.
+**- Files Affected:** `.github/workflows/*.yml`
+
+## IGNORE: Wildcard Mise Task Dependencies
+
+**- Pattern:** Using wildcard dependencies in `mise.toml` (e.g., `depends = ["lint:*"]`) instead of explicit lists.
+**- Justification:** The project prefers explicit lists of dependencies (e.g., `["lint:eslint", "lint:prettier"]`) to ensure deterministic execution order and clarity.
+**- Files Affected:** `mise.toml`
+
+## IGNORE: Redundant Color Normalization in Store
+
+**- Pattern:** Modifying `src/lib/stores/themes.ts` to implement `normalizeColor` with `unknown` type input or explicit string coercion.
+**- Justification:** This logic is already correctly implemented in `src/lib/utils/theme.ts`. Modifying the store file is incorrect (wrong location) and redundant.
+**- Files Affected:** `src/lib/stores/themes.ts`
+
+## IGNORE: Sanitizing Filename Fallback in Theme Loader
+
+**- Pattern:** Adding sanitization logic to the filename fallback path in `handleOneStructure` (e.g., `sanitize(filename)`).
+**- Justification:** Consistently rejected (PR #75). The risk of prototype pollution from filenames in this context is considered negligible or false positive by maintainers.
+**- Files Affected:** `src/lib/services/themeLoader.ts`, `src/lib/stores/themes.ts`
+
 ---
