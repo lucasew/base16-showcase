@@ -104,8 +104,9 @@ async function processFile(file: File) {
 			});
 		}
 		return;
-	} catch {
+	} catch (error) {
 		// JSON parsing failed, try YAML
+		reportError(error, { filename, phase: 'json_parse_fallback', expected: true });
 	}
 
 	// Try YAML parsing
