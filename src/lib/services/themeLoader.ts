@@ -142,10 +142,10 @@ export function initializeThemeListeners() {
 	};
 
 	const handleDoubleClick = () => {
-		const dataInput = document.getElementById('data-input') as HTMLInputElement;
-		if (!dataInput) return;
+		const dataInput = document.createElement('input');
+		dataInput.type = 'file';
+		dataInput.multiple = true;
 
-		// Use onchange property to ensure single listener and handle element replacement
 		dataInput.onchange = (ev: Event) => {
 			handleFilesInput((ev.target as HTMLInputElement).files);
 		};

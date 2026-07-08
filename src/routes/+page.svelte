@@ -26,4 +26,3 @@
 		</div>
 	</div>
 {/if}
-<input class="hidden" type="file" id="data-input" multiple />
