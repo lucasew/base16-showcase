@@ -1,8 +1,7 @@
 <script lang="ts">
 	import type { Theme } from '$lib/Model';
 
-	export let theme: Theme;
-	export let language: string = 'javascript';
+	let { theme, language = 'javascript' }: { theme: Theme; language?: string } = $props();
 
 	// Base16 Color Mapping
 	// base00: Default Background
@@ -22,7 +21,7 @@
 	// base0E: Keywords, Storage, Selector, Markup Italic, Diff Changed
 	// base0F: Deprecated, Opening/Closing Embedded Language Tags, e.g. <?php ?>
 
-	$: styles = `
+	let styles = $derived(`
     --base00: ${theme.colors.base00};
     --base01: ${theme.colors.base01};
     --base02: ${theme.colors.base02};
@@ -39,7 +38,7 @@
     --base0D: ${theme.colors.base0d};
     --base0E: ${theme.colors.base0e};
     --base0F: ${theme.colors.base0f};
-  `;
+  `);
 </script>
 
 <div class="code-preview-container" style={styles}>

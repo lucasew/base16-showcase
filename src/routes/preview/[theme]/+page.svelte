@@ -8,11 +8,11 @@
 	import * as m from '$lib/paraglide/messages.js';
 	import { base } from '$app/paths';
 
-	let themes: Maybe<Record<string, Theme>> = null;
+	let themes: Maybe<Record<string, Theme>> = $state(null);
 	themeStore.subscribe((_themes) => (themes = _themes));
 
-	$: themeId = $page.params.theme;
-	$: theme = themes && themeId ? themes[themeId] : undefined;
+	let themeId = $derived($page.params.theme);
+	let theme = $derived<Theme | undefined>(themes && themeId ? themes[themeId] : undefined);
 
 	function handleResize() {
 		if (typeof document === 'undefined') return;
@@ -42,9 +42,11 @@
 	});
 
 	// Re-run handleResize when theme loads
-	$: if (theme) {
-		setTimeout(handleResize, 0);
-	}
+	$effect(() => {
+		if (theme) {
+			setTimeout(handleResize, 0);
+		}
+	});
 </script>
 
 <div class="preview-page">

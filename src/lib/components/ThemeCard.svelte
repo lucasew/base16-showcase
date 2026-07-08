@@ -3,8 +3,7 @@
 	import * as m from '$lib/paraglide/messages.js';
 	import { base } from '$app/paths';
 
-	export let theme: Theme;
-	export let id: string | undefined = undefined;
+	let { theme, id = undefined }: { theme: Theme; id?: string | undefined } = $props();
 </script>
 
 <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300">
