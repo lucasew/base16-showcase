@@ -5,8 +5,6 @@ import { sanitize } from '$lib/utils/security';
 import { parseSimpleYaml } from '$lib/utils/yaml';
 import { reportError } from '$lib/utils/error';
 
-let themeCounter = 0;
-
 /**
  * Processes a single theme structure and adds it to the global store.
  * @param obj - The raw theme object.
@@ -21,9 +19,8 @@ function handleOneStructure(obj: any, filename?: string) {
 			// Use filename without extension
 			slug = filename.replace(/\.(json|yaml|yml)$/i, '');
 		} else {
-			// Fallback to counter
-			themeCounter++;
-			slug = `theme-${themeCounter}`;
+			// Fallback to UUID
+			slug = `theme-${crypto.randomUUID()}`;
 		}
 	}
 	const { author } = obj;
