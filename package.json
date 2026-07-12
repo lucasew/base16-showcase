@@ -42,14 +42,6 @@
 		"vite": "^7.2.4"
 	},
 	"dependencies": {
-		"@codemirror/lang-javascript": "^6.2.4",
-		"@codemirror/lang-rust": "^6.0.2",
-		"@codemirror/language": "^6.11.3",
-		"@codemirror/state": "^6.5.2",
-		"@codemirror/view": "^6.38.8",
-		"@lezer/highlight": "^1.2.3",
-		"@sentry/sveltekit": "^10",
-		"codemirror": "^6.0.2",
-		"svelte-markdown": "^0.4.1"
+		"@sentry/sveltekit": "^10"
 	}
 }
