@@ -20,7 +20,9 @@ const config = {
 				'script-src': ["'self'"],
 				'style-src': ["'self'", "'unsafe-inline'"],
 				'img-src': ["'self'"],
-				'connect-src': ["'self'"],
+				// Allow browser SDK envelopes to the project DSN host (US region).
+				// See src/hooks.client.ts — without this, CSP silently drops Sentry reports.
+				'connect-src': ["'self'", 'https://*.ingest.us.sentry.io'],
 				'base-uri': ["'self'"],
 				'object-src': ["'none'"]
 			}
