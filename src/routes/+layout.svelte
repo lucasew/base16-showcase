@@ -66,6 +66,7 @@
 			<a
 				href="https://github.com/lucasew/base16-showcase"
 				target="_blank"
+				rel="noopener noreferrer"
 				class="btn btn-square btn-ghost"
 				aria-label="Github"
 			>
