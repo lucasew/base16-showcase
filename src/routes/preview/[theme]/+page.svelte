@@ -1,18 +1,17 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import themeStore from '$lib/stores/themes';
-	import type { Maybe, Theme } from '$lib/Model';
+	import type { Theme } from '$lib/Model';
 	import ThemeCard from '$lib/components/ThemeCard.svelte';
 	import CodePreview from '$lib/components/CodePreview.svelte';
 	import { onMount } from 'svelte';
 	import * as m from '$lib/paraglide/messages.js';
 	import { base } from '$app/paths';
 
-	let themes: Maybe<Record<string, Theme>> = $state(null);
-	themeStore.subscribe((_themes) => (themes = _themes));
-
 	let themeId = $derived($page.params.theme);
-	let theme = $derived<Theme | undefined>(themes && themeId ? themes[themeId] : undefined);
+	let theme = $derived<Theme | undefined>(
+		$themeStore && themeId ? $themeStore[themeId] : undefined
+	);
 
 	function handleResize() {
 		if (typeof document === 'undefined') return;
@@ -36,7 +35,6 @@
 	}
 
 	onMount(() => {
-		window.addEventListener('resize', handleResize);
 		// Initial resize check after a short delay to ensure DOM is ready
 		setTimeout(handleResize, 100);
 	});
@@ -48,6 +46,8 @@
 		}
 	});
 </script>
+
+<svelte:window onresize={handleResize} />
 
 <div class="preview-page">
 	<div class="header">
@@ -78,7 +78,7 @@
 				</div>
 			</div>
 		</div>
-	{:else if themes}
+	{:else if $themeStore}
 		<div class="error">
 			<h2>{m.theme_not_found()}</h2>
 			<p>{m.theme_not_found_description({ id: themeId ?? '' })}</p>

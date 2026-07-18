@@ -19,7 +19,7 @@
 					<p>{m.drag_drop_instruction()}</p>
 					<p>{m.local_processing()}</p>
 				</div>
-				<button class="btn btn-primary" on:click={loadDefaultThemes}>
+				<button class="btn btn-primary" onclick={loadDefaultThemes}>
 					{m.load_default_colors()}
 				</button>
 			</div>
