@@ -6,10 +6,12 @@ const FORBIDDEN_KEYS = new Set(['__proto__', 'constructor', 'prototype']);
  * @param key - The object key to check.
  * @returns The original key, or a prefixed version (e.g., "safe-__proto__") if it is forbidden.
  */
-export function sanitize(key: string): string {
-	if (FORBIDDEN_KEYS.has(key)) {
+export function sanitize(key: unknown): string {
+	if (key == null) return '';
+	const keyStr = String(key);
+	if (FORBIDDEN_KEYS.has(keyStr)) {
 		// Prepend "safe-" to dangerous keys to neutralize them.
-		return `safe-${key}`;
+		return `safe-${keyStr}`;
 	}
-	return key;
+	return keyStr;
 }

@@ -7,9 +7,10 @@
  * @param color - The input value (typically a string, e.g., "#fff", "123456").
  * @returns The normalized hex string with a leading "#", or an empty string if invalid.
  */
-export function normalizeColor(color: any): string {
-	if (!color) return '';
+export function normalizeColor(color: unknown): string {
+	if (color == null) return '';
 	const colorStr = String(color);
+	if (!colorStr) return '';
 	const hex = colorStr.startsWith('#') ? colorStr.substring(1) : colorStr;
 
 	// Validate that the color is a valid hex code to prevent CSS injection.
