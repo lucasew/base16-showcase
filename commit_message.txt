@@ -1,0 +1,15 @@
+🧹 Janitor: Remove duplicated .inlang directory
+
+Assumptions:
+- Paraglide/Inlang v2 uses `project.inlang` for configuration. The `.inlang` directory is a legacy artifact and obsolete.
+
+Alternatives Not Chosen:
+- Keeping `.inlang` and removing `project.inlang`: This would break the compilation task for Paraglide v2 as defined in `package.json`.
+
+How To Pivot:
+- If `.inlang` is still needed for some other integration, it can be restored and the `project.inlang` configuration updated.
+
+Next Knobs:
+- Remove Sentry telemetry warnings by setting a mock token.
+- Resolve long line length issues reported by the tech debt tracker.
+- Investigate remaining duplicate code blocks in Svelte components.
