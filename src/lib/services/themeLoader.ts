@@ -118,47 +118,8 @@ async function processFile(file: File) {
 	}
 }
 
-function handleFilesInput(_files: FileList | null) {
+export function handleFilesInput(_files: FileList | null) {
 	if (!_files) return;
 	const files = Array.from(_files);
 	return Promise.all(files.map(processFile));
-}
-
-/**
- * Initializes global event listeners for file handling.
- */
-export function initializeThemeListeners() {
-	if (typeof document === 'undefined') return () => {};
-
-	const handleDrop = (ev: DragEvent) => {
-		ev.preventDefault();
-		if (ev.dataTransfer) {
-			handleFilesInput(ev.dataTransfer.files);
-		}
-	};
-
-	const handleDragOver = (ev: DragEvent) => {
-		ev.preventDefault();
-	};
-
-	const handleDoubleClick = () => {
-		const dataInput = document.getElementById('data-input') as HTMLInputElement;
-		if (!dataInput) return;
-
-		// Use onchange property to ensure single listener and handle element replacement
-		dataInput.onchange = (ev: Event) => {
-			handleFilesInput((ev.target as HTMLInputElement).files);
-		};
-		dataInput.click();
-	};
-
-	document.addEventListener('drop', handleDrop);
-	document.addEventListener('dragover', handleDragOver);
-	document.addEventListener('dblclick', handleDoubleClick);
-
-	return () => {
-		document.removeEventListener('drop', handleDrop);
-		document.removeEventListener('dragover', handleDragOver);
-		document.removeEventListener('dblclick', handleDoubleClick);
-	};
 }
