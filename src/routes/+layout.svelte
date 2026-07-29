@@ -4,7 +4,7 @@
 	import * as m from '$lib/paraglide/messages.js';
 	import { browser } from '$app/environment';
 	import { base } from '$app/paths';
-	import { initializeThemeListeners } from '$lib/services/themeLoader';
+	import { handleFilesInput } from '$lib/services/themeLoader';
 
 	const { children } = $props();
 
@@ -26,11 +26,30 @@
 		localStorage.setItem('theme', theme);
 	});
 
-	$effect(() => {
-		if (!browser) return;
-		return initializeThemeListeners();
-	});
+	const handleDrop = (ev: DragEvent) => {
+		ev.preventDefault();
+		if (ev.dataTransfer) {
+			handleFilesInput(ev.dataTransfer.files);
+		}
+	};
+
+	const handleDragOver = (ev: DragEvent) => {
+		ev.preventDefault();
+	};
+
+	const handleDoubleClick = () => {
+		const dataInput = document.getElementById('data-input') as HTMLInputElement;
+		if (!dataInput) return;
+
+		// Use onchange property to ensure single listener and handle element replacement
+		dataInput.onchange = (ev: Event) => {
+			handleFilesInput((ev.target as HTMLInputElement).files);
+		};
+		dataInput.click();
+	};
 </script>
+
+<svelte:document ondrop={handleDrop} ondragover={handleDragOver} ondblclick={handleDoubleClick} />
 
 <div class="min-h-screen bg-base-200">
 	<div class="navbar bg-base-100 shadow-sm">
